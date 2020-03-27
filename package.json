@@ -39,6 +39,10 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
+    "bump.js": "^1.0.3",
+    "matter-js": "^0.14.2",
+    "p2": "^0.7.1",
+    "pixi-plugin-bump": "^1.1.8",
     "pixi.js": "^5.2.1"
   }
 }
