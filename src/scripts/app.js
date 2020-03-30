@@ -2,7 +2,9 @@
 "use strict"
 import * as PIXI from "pixi.js"
 import * as Bump from "bump.js"
+import { Viewport } from "pixi-viewport"
 import { keyboard } from "./components/keyFunction"
+import { collideTest } from "./components/collideTest"
 const bump = new Bump(PIXI)
 
 const canvas = document.getElementById("canvas")
@@ -16,47 +18,60 @@ const game = new PIXI.Application({
   backgroundColor: 0xffffff
 
 })
+const viewport = new Viewport({
+  width: _width,
+  height: _height
+})
+
 const gameScene = new PIXI.Container()
+
 game.stage.addChild(gameScene)
+gameScene.addChild(viewport)
 
 function setLevel (sheet) {
-  const fanal = setFanal(sheet)
-  const plateform = setPlateform(sheet)
-  const player = setPlayer(sheet, plateform)
-}
-
-function setPlayer (sheet, plateform) {
-  const playerSprite = new PIXI.Sprite(sheet.textures["perso_2.png"])
-  const player = new Player(playerSprite, plateform)
-  player.animate()
-  player.display()
-  player.control()
-  return player
-}
-function setPlateform (sheet) {
+//   const fanal = setFanal(sheet)
+//   const plateform = setPlateform(sheet, player)
+//   const player = setPlayer(sheet, plateform)
   const allPlateform = []
-  const platformSprite = new PIXI.Sprite(sheet.textures["plateform.png"])
+  const allFanal = []
+  const player = new Player(sheet, allPlateform)
 
-  for (let i = 0; i < 6; i++) {
-    const plateform = new Plateform(platformSprite, _width / 2, 100 * i)
+  player.display()
+  player.animate()
+  player.control()
+
+  for (let i = 0; i < 20; i++) {
+    const plateform = new Plateform(sheet, (200 * i) + _width / 2 * (i + 1), _height / 2)
+
     allPlateform.push(plateform)
+  }
+  for (let i = 0; i < 5; i++) {
+    const fanal = new Fanal(sheet, _width / 2 * (i + 1), _height / 2 - 100)
+    allFanal.push(fanal)
+  }
+  for (let y = 0; y < allFanal.length; y++) {
+    allFanal[y].display()
+    allFanal[y].check(player)
   }
   for (let y = 0; y < allPlateform.length; y++) {
     allPlateform[y].display()
+    allPlateform[y].check(player)
   }
+}
 
-  return {
-    allPlateform
-  }
-}
-function setFanal (sheet) {
-  const fanalSprite = new PIXI.Sprite(sheet.textures["fanal.png"])
-  const fanal = new Fanal(fanalSprite, _width / 2, _height / 2)
-  fanal.display()
-  return {
-    fanal
-  }
-}
+// function setPlayer (sheet, plateform) {
+
+// }
+// function setPlateform (sheet, player) {
+//   return {
+//     allPlateform
+//   }
+// }
+// function setFanal (sheet) {
+//   return {
+//     fanal
+//   }
+// }
 
 PIXI.Loader.shared
   .add("assets/images/spriteSheet.json")
@@ -66,11 +81,12 @@ PIXI.Loader.shared
     setLevel(sheet)
   })
 class Fanal {
-  constructor (sprite, xPos, yPos) {
-    this.sprite = sprite
+  constructor (sheet, xPos, yPos) {
+    this.sprite = new PIXI.Sprite(sheet.textures["fanal.png"])
     this.anchor = 0.5
     this.x = xPos
     this.y = yPos
+    this.activate = keyboard("e")
   }
 
   display () {
@@ -79,11 +95,22 @@ class Fanal {
     this.sprite.y = this.y
     gameScene.addChild(this.sprite)
   }
+
+  check (player) {
+    game.ticker.add(e => {
+      this.colision = collideTest(this.sprite, player.sprite)
+      this.activate.press = (e) => {
+        if (this.colision) {
+          console.log("bien ouej")
+        }
+      }
+    })
+  }
 }
 class Player {
-  constructor (sprite, plateform) {
-    this.sprite = sprite
-    this.x = game.renderer.width / 2 - this.sprite.width / 2
+  constructor (sheet, plateform) {
+    this.sprite = new PIXI.Sprite(sheet.textures["perso_2.png"])
+    this.x = _width / 2 - this.sprite.width / 2
     this.y = 0
     this.vx = 0
     this.vy = 0
@@ -91,15 +118,21 @@ class Player {
     this.left = keyboard("q")
     this.right = keyboard("d")
     this.up = keyboard("z")
+    this.down = keyboard("s")
+    this.space = keyboard(" ")
     this.plateformArray = plateform
     this.plateforms = []
+    this.hit = false
+    this.stageVx = 0
+    this.dash = 0
+    this.dashed = false
+    this.dashTimer = 0
   }
 
   display () {
-    for (let i = 0; i < this.plateformArray.allPlateform.length; i++) {
-      this.plateforms.push(this.plateformArray.allPlateform[i].sprite)
+    for (let i = 0; i < this.plateformArray.length; i++) {
+      this.plateforms.push(this.plateformArray[i].sprite)
     }
-    console.log(this.plateforms)
 
     this.sprite.x = this.x
     this.sprite.y = this.y
@@ -108,44 +141,69 @@ class Player {
 
   control () {
     this.left.press = (e) => {
-      this.vx += -10
+      this.vx = -15
+      this.stageVx = -15
     }
     this.right.press = (e) => {
-      this.vx = +10
+      this.vx = 15
+      this.stageVx = 15
     }
     this.up.press = (e) => {
-      this.vy += -10
+      this.vy = -15
     }
     this.left.release = (e) => {
       this.vx = 0
+      this.stageVx = 0
     }
     this.right.release = (e) => {
       this.vx = 0
+      this.stageVx = 0
     }
-    this.up.release = (e) => {
-      this.vy = 0
-      this.gravity = 0
+
+    // this.space.press = (e) => {
+    //   if (this.right.isDown && !this.dashed && this.dashTimer < 1) {
+    //     this.dash = 50
+    //     this.dashed = true
+    //   }
+    //   if (this.left.isDown && !this.dashed) {
+    //     this.dash = -50
+    //     this.dashed = true
+    //   }
+    // }
+    this.space.release = (e) => {
+      this.dash = 0
     }
   }
 
   animate () {
     game.ticker.add(e => {
-      const colision = bump.hit(this.sprite, this.plateforms)
-      this.sprite.x += this.vx
-      this.sprite.y += this.vy + this.gravity
+      console.log(this.dashed)
 
-      if (colision) {
-        this.gravity = 0
-      } else {
-        this.gravity += 0.6
+      if (this.right.isDown && this.left.isDown) {
+        this.vx = 0
+        this.stageVx = 0
       }
+
+      gameScene.pivot.x += this.vx + this.dash
+
+      this.gravity += 0.6
+      //   this.colision = bump.hit(this.sprite, this.plateforms)
+      //   for (let i = 0; i < this.plateformArray.length; i++) {
+      //     if (this.plateformArray[i].check(this.sprite)) {
+      //       this.hit = this.plateformArray[i].colision
+      //     } else {
+      //       this.hit = this.plateformArray[i].colision
+      //     }
+      //   }
+
+      this.sprite.x += this.vx + this.dash
+      this.sprite.y += this.vy + this.gravity
     })
   }
 }
 class Plateform {
-  constructor (sprite, xPos, yPos) {
-    this.sprite = sprite
-    this.anchor = 0.5
+  constructor (sheet, xPos, yPos) {
+    this.sprite = new PIXI.Sprite(sheet.textures["plateform.png"])
     this.x = xPos - this.sprite.width / 2
     this.y = yPos - this.sprite.height / 2
   }
@@ -153,8 +211,18 @@ class Plateform {
   display () {
     this.sprite.x = this.x
     this.sprite.y = this.y
-    console.log(this.y)
-
     gameScene.addChild(this.sprite)
+  }
+
+  check (player) {
+    game.ticker.add(e => {
+      this.colisionPlayer = collideTest(this.sprite, player.sprite)
+
+      if (this.colisionPlayer) {
+        player.gravity = -0.6
+        player.vy = 0
+        player.dashed = false
+      }
+    })
   }
 }
