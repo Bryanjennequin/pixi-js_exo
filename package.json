@@ -41,13 +41,12 @@
   "dependencies": {
     "@lcluber/bumpjs": "^0.5.4",
     "bump.js": "^1.0.3",
-    "pixi.js": "^5.2.1",
     "intersects": "^2.7.1",
     "matter-js": "^0.14.2",
     "p2": "^0.7.1",
     "pixi-plugin-bump": "^1.1.8",
     "pixi-viewport": "^4.10.0",
-    
+    "pixi.js": "^5.2.1",
     "yy-intersects": "^1.0.8"
   }
 }
