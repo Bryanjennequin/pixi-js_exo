@@ -15,7 +15,7 @@ console.log(MATTER)
 const canvas = document.getElementById("canvas")
 const _width = window.innerWidth
 const _height = window.innerHeight
-let score = 0
+const score = 0
 
 const Engine = MATTER.Engine
 // const Render = MATTER.Render
@@ -72,13 +72,30 @@ function start () {
     game.stage.removeChild(touches)
     game.stage.removeChild(action)
     PIXI.Loader.shared
-      .add("./assets/images/spriteSheet.json")
+      .add("./assets/images/player/playerState.json")
+      .add("./assets/images/platforme/plateformeJump.json")
+      .add("./assets/images/platforme/plateform_start.json")
+      .add("./assets/images/platforme/plateform_pause2.json")
+      .add("./assets/images/monstre/monstreState.json")
+      .add("./assets/images/relique/relique.json")
+      // .add("./assets/images/spriteSheet.json")
+      // .add("./assets/images/spriteSheet.json")
       .load(e => {})
       .onComplete.add((e) => {
-        const sheet = PIXI.Loader.shared.resources["./assets/images/spriteSheet.json"].spritesheet
-        setLevel(sheet)
+        // const playerSheet = PIXI.Loader.shared.resources["./assets/images/player/playerState.json"].spritesheet
+        // const PlateformJumpSheet = PIXI.Loader.shared.resources["./assets/images/platform/plateformeJump.json"].spritesheet
+        // const PlateformStartSheet = PIXI.Loader.shared.resources["./assets/images/platform/plateform_start.json"].spritesheet
+        console.log(Object.entries(PIXI.Loader.shared.resources))
+        const sprites = []
+        for (let i = 0; i < Object.entries(PIXI.Loader.shared.resources).length; i++) {
+          sprites.push(PIXI.Loader.shared.resources[`${Object.entries(PIXI.Loader.shared.resources)[i][0]}`].spritesheet)
+          console.log()
+          console.log(sprites)
+        }
+        // const sheet = PIXI.Loader.shared.resources["./assets/images/spriteSheet.json"].spritesheet
+        // const sheet = PIXI.Loader.shared.resources["./assets/images/spriteSheet.json"].spritesheet
+        // setLevel(sheet)
       })
-    console.log(gameScene.x)
   }
 
   Engine.run(engine)
@@ -139,6 +156,7 @@ function setLevel (sheet) {
   // bg.y = -_height / 4
   // bg.zIndex = -2
   // game.stage.addChild(bg)
+  console.log(sheet)
   const allPlateform = []
   const platInfo = [
     { x: 1440 / 2, y: _height / 2, moveX: false, moveY: false, falling: false },
@@ -157,13 +175,13 @@ function setLevel (sheet) {
     { x: 1440 * 6.5, y: _height / 2, moveX: false, moveY: false, falling: false }
   ]
 
-  const fanalInfo = [
-    { x: 1440, y: _height / 2 - 200 },
-    { x: 1440 * 2, y: _height / 2 },
-    { x: 1440 * 6.5, y: _height / 2 }
-  ]
+  // const fanalInfo = [
+  //   { x: 1440, y: _height / 2 - 200 },
+  //   { x: 1440 * 2, y: _height / 2 },
+  //   { x: 1440 * 6.5, y: _height / 2 }
+  // ]
 
-  const allFanal = []
+  // const allFanal = []
   const player = new Player(sheet)
 
   player.display()
@@ -176,28 +194,28 @@ function setLevel (sheet) {
     allPlateform.push(plateform)
   }
 
-  for (let i = 0; i < fanalInfo.length; i++) {
-    const fanal = new Fanal(sheet, fanalInfo[i])
-    allFanal.push(fanal)
-  }
-  for (let y = 0; y < allFanal.length; y++) {
-    allFanal[y].display()
-    allFanal[y].check(player)
-  }
+  // for (let i = 0; i < fanalInfo.length; i++) {
+  //   const fanal = new Fanal(sheet, fanalInfo[i])
+  //   allFanal.push(fanal)
+  // }
+  // for (let y = 0; y < allFanal.length; y++) {
+  //   allFanal[y].display()
+  //   allFanal[y].check(player)
+  // }
   for (let y = 0; y < allPlateform.length; y++) {
     allPlateform[y].display()
     allPlateform[y].animate()
     allPlateform[y].check(player)
   }
 
-  const scoreText = new PIXI.Text(`brasero(s) allumé : ${score}`)
-  game.stage.addChild(scoreText)
-  game.ticker.add(e => {
-    scoreText.text = `brasero(s) allumé : ${score}`
-    if (score === fanalInfo.length) {
-      gameEnd()
-    }
-  })
+  // const scoreText = new PIXI.Text(`brasero(s) allumé : ${score}`)
+  // game.stage.addChild(scoreText)
+  // game.ticker.add(e => {
+  //   scoreText.text = `brasero(s) allumé : ${score}`
+  //   if (score === fanalInfo.length) {
+  //     gameEnd()
+  //   }
+  // })
   setInterval(e => {
     const cloud = new Cloud(sheet)
     cloud.display()
@@ -241,39 +259,39 @@ class Cloud {
     })
   }
 }
-class Fanal {
-  constructor (sheet, fanalInfo) {
-    this.sheet = sheet
-    this.sprite = new PIXI.Sprite(this.sheet.textures["fanal_noFire.png"])
-    this.x = fanalInfo.x
-    this.y = fanalInfo.y - this.sprite.height / 3
-    this.activate = keyboard("e")
-  }
+// class Fanal {
+//   constructor (sheet, fanalInfo) {
+//     this.sheet = sheet
+//     this.sprite = new PIXI.Sprite(this.sheet.textures["fanal_noFire.png"])
+//     this.x = fanalInfo.x
+//     this.y = fanalInfo.y - this.sprite.height / 3
+//     this.activate = keyboard("e")
+//   }
 
-  display () {
-    this.sprite.anchor.set(0)
-    this.sprite.width = this.sprite.width / 2
-    this.sprite.height = this.sprite.height / 2
-    this.fired = false
-    this.sprite.x = this.x
-    this.sprite.y = this.y
-    gameScene.addChild(this.sprite)
-  }
+//   display () {
+//     this.sprite.anchor.set(0)
+//     this.sprite.width = this.sprite.width / 2
+//     this.sprite.height = this.sprite.height / 2
+//     this.fired = false
+//     this.sprite.x = this.x
+//     this.sprite.y = this.y
+//     gameScene.addChild(this.sprite)
+//   }
 
-  check (player) {
-    game.ticker.add(e => {
-      this.colision = collideTest(this.sprite, player.sprite)
-      this.activate.press = (e) => {
-        if (this.colision && !this.fired) {
-          this.fired = true
-          score++
-          console.log(score)
-          this.sprite.texture = this.sheet.textures["fanal.png"]
-        }
-      }
-    })
-  }
-}
+//   check (player) {
+//     game.ticker.add(e => {
+//       this.colision = collideTest(this.sprite, player.sprite)
+//       this.activate.press = (e) => {
+//         if (this.colision && !this.fired) {
+//           this.fired = true
+//           score++
+//           console.log(score)
+//           this.sprite.texture = this.sheet.textures["fanal.png"]
+//         }
+//       }
+//     })
+//   }
+// }
 class Player {
   constructor (sheet) {
     this.sprite = new PIXI.Sprite(sheet.textures["perso.png"])
@@ -306,6 +324,7 @@ class Player {
     this.sprite.height = 80
     this.sprite.x = this.x
     this.body.frictionAir = 0.01
+    this.body.inertia = Infinity
     gameScene.addChild(this.sprite)
     // this.graphicss = new PIXI.Graphics()
 

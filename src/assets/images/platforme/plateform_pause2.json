@@ -1,0 +1,39 @@
+{"frames": {
+
+"plateform_pause2_anim_1.png":
+{
+	"frame": {"x":0,"y":0,"w":1573,"h":1600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1573,"h":1600},
+	"sourceSize": {"w":1573,"h":1600}
+},
+"plateform_pause2_anim_2.png":
+{
+	"frame": {"x":1573,"y":0,"w":1573,"h":1600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1573,"h":1600},
+	"sourceSize": {"w":1573,"h":1600}
+},
+"plateform_pause2_anim_3.png":
+{
+	"frame": {"x":0,"y":1600,"w":1573,"h":1600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1573,"h":1600},
+	"sourceSize": {"w":1573,"h":1600}
+}},
+"animations": {
+	"plateform_pause2_anim": ["plateform_pause2_anim_1.png","plateform_pause2_anim_2.png","plateform_pause2_anim_3.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "plateform_pause2.png",
+	"format": "RGBA8888",
+	"size": {"w":3146,"h":3200},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:061b70a5481fb5739eb405fc463d5bdb:7ed1dbaaeb07f2d06614ef8fef3d5d64:5110b4850b892514c6eca9e8310d1dd7$"
+}
+}

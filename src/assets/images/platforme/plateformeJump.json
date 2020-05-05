@@ -1,0 +1,44 @@
+{"frames": {
+
+"plateform_longue.png":
+{
+	"frame": {"x":0,"y":0,"w":398,"h":38},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":398,"h":38},
+	"sourceSize": {"w":398,"h":38}
+},
+"plateform_moyenne.png":
+{
+	"frame": {"x":398,"y":0,"w":199,"h":38},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":199,"h":38},
+	"sourceSize": {"w":199,"h":38}
+},
+"plateform_pause.png":
+{
+	"frame": {"x":597,"y":0,"w":1083,"h":1600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1083,"h":1600},
+	"sourceSize": {"w":1083,"h":1600}
+},
+"plateform_petite.png":
+{
+	"frame": {"x":1680,"y":0,"w":99,"h":38},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":99,"h":38},
+	"sourceSize": {"w":99,"h":38}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "plateformeJump.png",
+	"format": "RGBA8888",
+	"size": {"w":1779,"h":1600},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e4fe1598fc292c9e19f69bb7024b154b:24b81ac2c04c9883a60da1c3d59221a8:f03f3ad5d27e6183c5a55760234beb9d$"
+}
+}
