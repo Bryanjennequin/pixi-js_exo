@@ -6,10 +6,10 @@ export function collideTest (r1, r2) {
   hit = false
 
   // Find the center points of each sprite
-  r1.centerX = r1.x + r1.width / 2
-  r1.centerY = r1.y + r1.height / 2
-  r2.centerX = r2.x + r2.width / 2
-  r2.centerY = r2.y + r2.height / 2
+  r1.centerX = r1.x
+  r1.centerY = r1.y
+  r2.centerX = r2.x
+  r2.centerY = r2.y
 
   // Find the half-widths and half-heights of each sprite
   r1.halfWidth = r1.width / 2

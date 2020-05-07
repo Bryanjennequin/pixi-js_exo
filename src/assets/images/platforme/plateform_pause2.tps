@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>plateform_pause2.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
