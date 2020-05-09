@@ -9,6 +9,7 @@ const _width = window.innerWidth
 const _height = window.innerHeight
 const score = 0
 const gameScene = new PIXI.Container()
+const gameBg = new PIXI.Container()
 let engine
 
 const Engine = MATTER.Engine
@@ -21,11 +22,11 @@ const game = new PIXI.Application({
   backgroundColor: 0x77B5FE
 
 })
-
 game.stage.sortableChildren = true
 gameScene.sortableChildren = true
 game.ticker.maxFPS = 60
-game.stage.addChild(gameScene)
+game.stage.addChild(gameScene, gameBg)
+
 function start () {
   engine = Engine.create()
   const start = keyboard("Enter")
@@ -66,6 +67,8 @@ function start () {
       .add("./assets/images/platforme/plateform_pause2.json")
       .add("./assets/images/monstre/monstreState.json")
       .add("./assets/images/relique/relique.json")
+      .add("./assets/images/background.png")
+      .add("./assets/images/cloud.png")
       .load(e => {})
       .onComplete.add((e) => {
         const sprites = {
@@ -74,7 +77,9 @@ function start () {
           "plateformeStart": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_start.json"].spritesheet,
           "plateformePause2": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_pause2.json"].spritesheet,
           "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
-          "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet
+          "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
+          "background": PIXI.Loader.shared.resources["./assets/images/background.png"],
+          "background": PIXI.Loader.shared.resources["./assets/images/cloud.png"]
 
         }
         setLevel(sprites)
@@ -83,7 +88,6 @@ function start () {
   game.ticker.add(e => {
     Engine.update(engine)
   })
-  // Engine.run(engine)
 }
 function gameOver () {
   const restart = keyboard("r")
@@ -136,26 +140,32 @@ function gameEnd () {
 }
 
 function setLevel (sprites) {
+  const bg = PIXI.Sprite.from("./assets/images/background.png")
+  bg.anchor.set(0, 1)
+  bg.x = 0
+  bg.y = _height + 300
+  gameBg.zIndex = -1
+  gameBg.addChild(bg)
   const allPlateform = []
   const allPlateformSpecial = []
   const platInfo =
     {
       special: [
         { x: 0, y: _height / 2, model: "start" },
-        { x: 1440 * 2.5, y: _height / 2, model: "pause0" }
-        // { x: 1440, y: _height / 2, model: "pause1" }
+        { x: 1440 * 2.5, y: _height / 2, model: "pause0" },
+        { x: 1440 + 3000, y: _height / 2, model: "pause1" }
       ],
       classique: [
-        { x: 1440 / 2, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
+        { x: 1440 / 2, y: _height / 2, size: "longue", moveX: false, moveY: true, falling: false },
         { x: 1440 - 300, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440 + 300, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440 + 900, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
-        { x: 1440 * 2.5 + 600, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
-        { x: 1440 * 2.5 + 900, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
-        { x: 1440 * 2.5 + 1200, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
-        { x: 1440 * 2.5 + 1500, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
-        { x: 1440 * 4, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
+        { x: 1440 + 1200, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
+        { x: 1440 + 1500, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
+        { x: 1440 + 1800, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
+        { x: 1440 + 2100, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
+        { x: 1440 + 4000, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
         { x: 1440 * 5.5, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
         { x: 1440 * 6, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
         { x: 1440 * 6.5, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false }
@@ -167,114 +177,107 @@ function setLevel (sprites) {
   player.animate()
   player.control()
 
+  const relique = new Relique(sprites.relique)
+  relique.display()
+  relique.animate()
+  relique.control()
   for (let i = 0; i < platInfo.classique.length; i++) {
-    const plateform = new Plateform(sprites.plateformeJump, platInfo.classique[i])
+    const plateform = new Plateform(sprites.plateformeJump, platInfo.classique[i], player)
     allPlateform.push(plateform)
   }
   for (let i = 0; i < platInfo.special.length; i++) {
-    // (platInfo.special[i].model === "start")
-    //   ? console.log("true") : (platInfo.special[i].model === "pause0")
-    //     ? console.log("true") : (platInfo.special[i].model === "pause1")
-    //       ? console.log("true") : console.log("false")
-
     const plateform = new CheckPointPlateform(sprites, platInfo.special[i])
     allPlateformSpecial.push(plateform)
-
-    // if (platInfo.special[i].model === "pause0") {
-    //   const plateform = new CheckPointPlateform(sprites.plateformeJump, platInfo.special[i])
-    //   allPlateformSpecial.push(plateform)
-    // }
-    // if (platInfo.special[i].model === "pause1") {
-    //   const plateform = new CheckPointPlateform(sprites.plateformPause2, platInfo.special[i])
-    //   allPlateformSpecial.push(plateform)
-    // }
   }
   for (let i = 0; i < allPlateformSpecial.length; i++) {
     allPlateformSpecial[i].display()
+    allPlateformSpecial[i].check(player)
   }
   for (let i = 0; i < allPlateform.length; i++) {
     allPlateform[i].display()
     allPlateform[i].animate()
-    allPlateform[i].check(player)
+    allPlateform[i].check()
   }
+  // const clouds = []
+  // setInterval(e => {
+  //   const cloud = new Cloud(sprites)
+  //   clouds.push(cloud)
+  //   console.log(clouds)
+  // }, 2000)
 }
 
 start()
 
-// class Cloud {
-//   constructor (sheet, playerPos) {
-//     this.playerPos = gameScene.pivot.x
-//     this.x = this.playerPos + _width
-//     this.y = Math.random() * _height / 2
-//     this.sheet = sheet
-//     this.sprite = new PIXI.Sprite(this.sheet.textures["cloud_1.png"])
-//     this.vx = Math.random() * 5 + 2
-//   }
+class Cloud {
+  constructor (sheet) {
+    this.playerPos = gameScene.pivot.x
+    this.x = this.playerPos + _width
+    this.y = Math.random() * _height / 2
+    this.sheet = sheet
+    this.sprite = new PIXI.Sprite.from("./assets/images/cloud_2.png")
+    this.vx = Math.random() * 5 + 2
+  }
 
-//   display () {
-//     if (Math.random() > 0.5) {
-//       this.sprite.texture = this.sheet.textures["cloud_2.png"]
-//     }
-//     if (Math.random() > 0.1) {
-//       this.sprite.zIndex = -3
-//     } else {
-//       this.sprite.zIndex = 1
-//     }
-//     this.sprite.x = this.x
-//     this.sprite.y = this.y
+  display () {
+    // if (Math.random() > 0.5) {
+    //   this.sprite.texture = this.sheet.textures["cloud_2.png"]
+    // }
 
-//     gameScene.addChild(this.sprite)
-//   }
+    this.sprite.x = this.x
+    this.sprite.y = this.y
 
-//   animate () {
-//     game.ticker.add(e => {
-//       this.sprite.x += -this.vx
-//       // console.log(`${this.sprite.x} /// ${gameScene.pivot.x}`)
-//       if (this.sprite.x < gameScene.pivot.x - this.sprite.width) {
-//         gameScene.removeChild(this.sprite)
-//       }
-//     })
-//   }
-// }
-// class Fanal {
-//   constructor (sheet, fanalInfo) {
-//     this.sheet = sheet
-//     this.sprite = new PIXI.Sprite(this.sheet.textures["fanal_noFire.png"])
-//     this.x = fanalInfo.x
-//     this.y = fanalInfo.y - this.sprite.height / 3
-//     this.activate = keyboard("e")
-//   }
+    gameBg.addChild(this.sprite)
+  }
 
-//   display () {
-//     this.sprite.anchor.set(0)
-//     this.sprite.width = this.sprite.width / 2
-//     this.sprite.height = this.sprite.height / 2
-//     this.fired = false
-//     this.sprite.x = this.x
-//     this.sprite.y = this.y
-//     gameScene.addChild(this.sprite)
-//   }
+  animate () {
+    game.ticker.add(e => {
+      this.sprite.x += -this.vx
+      // console.log(`${this.sprite.x} /// ${gameScene.pivot.x}`)
+      if (this.sprite.x < gameScene.pivot.x - this.sprite.width) {
+        gameBg.removeChild(this.sprite)
+      }
+    })
+  }
+}
+class Fanal {
+  constructor (sheet, fanalInfo) {
+    this.sheet = sheet
+    this.sprite = new PIXI.Sprite(this.sheet.textures["fanal_noFire.png"])
+    this.x = fanalInfo.x
+    this.y = fanalInfo.y - this.sprite.height / 3
+    this.activate = keyboard("e")
+  }
 
-//   check (player) {
-//     game.ticker.add(e => {
-//       this.colision = collideTest(this.sprite, player.sprite)
-//       this.activate.press = (e) => {
-//         if (this.colision && !this.fired) {
-//           this.fired = true
-//           score++
-//           console.log(score)
-//           this.sprite.texture = this.sheet.textures["fanal.png"]
-//         }
-//       }
-//     })
-//   }
-// }
+  display () {
+    this.sprite.anchor.set(0)
+    this.sprite.width = this.sprite.width / 2
+    this.sprite.height = this.sprite.height / 2
+    this.fired = false
+    this.sprite.x = this.x
+    this.sprite.y = this.y
+    gameScene.addChild(this.sprite)
+  }
+
+  check (player) {
+    game.ticker.add(e => {
+      this.colision = collideTest(this.sprite, player.sprite)
+      this.activate.press = (e) => {
+        if (this.colision && !this.fired) {
+          this.fired = true
+          score++
+          console.log(score)
+          this.sprite.texture = this.sheet.textures["fanal.png"]
+        }
+      }
+    })
+  }
+}
 class Player {
   constructor (sheet) {
     this.sheet = sheet
     // this.sprite = new PIXI.Sprite(this.sheet.textures["player_stop.png"])
     this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.perso_anim)
-    this.x = 720
+    this.x = 200
     this.y = _height / 2 - this.sprite.height
     this.vx = 0
     this.vy = 0
@@ -295,13 +298,13 @@ class Player {
 
   display () {
     this.sprite.texture = this.sheet.textures["player_stop.png"]
+    this.sprite.animationSpeed = 0.167
     this.sprite.zIndex = 100
     this.sprite.anchor.set(0.5, 0.5)
     this.body = Bodies.rectangle(this.x, this.y, this.sprite.width / 4, this.sprite.height)
     this.body.mass = 1
-    this.body.frictionAir = 1
-    this.body.frictionStatic = 1
-    this.body.friction = 1
+    this.friction = 1
+    this.frictionStatic = 1
     MATTER.Body.setInertia(this.body, Infinity)
     World.add(engine.world, this.body)
     gameScene.addChild(this.sprite)
@@ -310,23 +313,29 @@ class Player {
 
   control () {
     this.left.press = (e) => {
-      this.force = -0.05 * this.body.mass
+      this.force = -7.5
+      this.sprite.scale.x = -1
+
+      this.sprite.play()
       // this.stageVx = -this.speed
     }
     this.right.press = (e) => {
+      this.sprite.scale.x = 1
       this.sprite.animationSpeed = 0.167
       this.sprite.play()
-      this.force = 0.05 * this.body.mass
+      this.force = 7.5
     }
     this.up.press = (e) => {
       if (this.jumped <= 1) {
-        this.forceJump = -0.035 * this.body.mass
+        this.forceJump = -0.03 * this.body.mass
         MATTER.Body.applyForce(this.body, this.body.position, { x: 0, y: this.forceJump })
         this.jumped++
       }
     }
     this.left.release = (e) => {
       this.force = 0
+      this.sprite.stop()
+      this.sprite.texture = this.sheet.textures["player_stop.png"]
     }
     this.right.release = (e) => {
       this.force = 0
@@ -347,23 +356,79 @@ class Player {
       }
 
       if (this.right.isDown || this.left.isDown) {
-        MATTER.Body.applyForce(this.body, this.body.position, { x: this.force, y: 0 })
+        MATTER.Body.translate(this.body, { x: this.force, y: 0 })
+        gameBg.pivot.x += this.force / 10
       }
 
       gameScene.pivot.x = this.body.position.x - window.innerWidth / 2
+
       if (this.sprite.y > _height + 300) {
         gameOver()
       }
-      // MATTER.Body.translate(this.body, { x: this.vx, y: this.vy })
-      // this.body.position.x += this.vx
-      // this.body.position.y += this.vy
       this.sprite.x = this.body.position.x
       this.sprite.y = this.body.position.y
     })
   }
 }
+class Relique {
+  constructor (sheet) {
+    this.sheet = sheet
+    this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.relique)
+    this.left = keyboard("ArrowLeft")
+    this.right = keyboard("ArrowRight")
+    this.up = keyboard("ArrowUp")
+    this.down = keyboard("ArrowDown")
+    this.vx = 0
+    this.vy = 0
+  }
+
+  display () {
+    this.sprite.animationSpeed = 0.167
+    this.sprite.zIndex = 101
+    this.sprite.play()
+    gameScene.addChild(this.sprite)
+    console.log(this.sheet)
+  }
+
+  control () {
+    this.left.press = e => {
+      this.vx = -7.5
+    }
+    this.left.release = e => {
+      this.vx = 0
+    }
+    this.right.press = e => {
+      this.vx = 7.5
+    }
+    this.right.release = e => {
+      this.vx = 0
+    }
+    this.up.press = e => {
+      this.vy = -7.5
+    }
+    this.up.release = e => {
+      this.vy = 0
+    }
+    this.down.press = e => {
+      this.vy = 7.5
+    }
+    this.down.release = e => {
+      this.vy = 0
+    }
+  }
+
+  animate () {
+    game.ticker.add(e => {
+      this.sprite.x += this.vx
+      this.sprite.y += this.vy
+    })
+  }
+}
 class Plateform {
-  constructor (sheet, platInfo) {
+  constructor (sheet, platInfo, player) {
+    this.player = player
+    this.bPlayer = this.player.body
+    this.sPlayer = this.player.sprite
     this.sheet = sheet
     this.sprite = new PIXI.Sprite(this.sheet.textures[`plateform_${platInfo.size}.png`])
     this.x = platInfo.x
@@ -382,10 +447,11 @@ class Plateform {
 
   display () {
     this.sprite.anchor.set(0.5)
-    this.sprite.x = this.x
-    this.sprite.y = this.y
     this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, this.option)
     this.body.friction = 1
+    this.body.frictionStatic = 1
+    this.sprite.x = this.body.position.x
+    this.sprite.y = this.body.position.y
     World.add(engine.world, this.body)
     gameScene.addChild(this.sprite)
   }
@@ -393,15 +459,15 @@ class Plateform {
   animate () {
     if (this.platInfo.moveY) {
       game.ticker.add(e => {
-        if (this.sprite.y < -300) {
-          this.body.position.y = _height + 300
-          this.sprite.y = this.body.position.y
+        if (this.sprite.y < -300 || this.sprite.y > _height + 300) {
+          this.vy *= -1
         }
-        this.body.position.y += -this.vy
+
+        MATTER.Body.translate(this.body, { x: 0, y: this.vy })
         this.sprite.y = this.body.position.y
       })
     }
-    // this.vx = -this.vx
+
     if (this.platInfo.moveX) {
       game.ticker.add(e => {
         // console.log(`${this.sprite.x}/// ${this.initialX}`)
@@ -412,42 +478,32 @@ class Plateform {
         if (this.sprite.x <= this.initialX) {
           this.vx = this.xSpeed
         }
-        this.sprite.x += this.vx
+        // MATTER.Body.applyForce(this.body, this.body.position, {x : this.vx, y:0})
+        // MATTER.Body.setVelocity(this.body, { x: this.vx, y: 0 })
+        MATTER.Body.translate(this.body, { x: this.vx, y: 0 })
+        this.sprite.x = this.body.position.x
       })
     }
-    if (this.platInfo.falling) {
-      game.ticker.add(e => {
-        if (this.willFall) {
-          this.gravity += 0.5
-          this.sprite.y += this.gravity
-        }
-      })
-    }
+    // if (this.platInfo.falling) {
+    //   game.ticker.add(e => {
+    //     if (this.willFall) {
+    //       this.gravity += 0.5
+    //       this.sprite.y += this.gravity
+    //     }
+    //   })
+    // }
   }
 
-  check (player) {
+  check () {
     game.ticker.add(e => {
-      // console.log(MATTER.Detector.canCollide(this.body.collisionFilter, player.body.collisionFilter))
-    })
-
-    // this.colisionPlayer = new intersects.Rectangle(this.sprite.x, this.sprite.x, this.sprite.width, this.sprite.height, player.sprite.x, player.sprite.y, player.sprite.width, player.sprite.height)
-    // console.log(this.colisionPlayer)
-    game.ticker.add(e => {
-      this.colisionPlayer = collideTest(this.sprite, player.sprite)
-      // this.colisionPlayer = b.hitTestRectangle(this.sprite, player.sprite)
-
-      //   console.log(`${player.sprite.y + player.sprite.height}////${this.sprite.y - this.sprite.height / 2}`)
-
+      this.colisionPlayer = collideTest(this.sprite, this.sPlayer)
       if (this.colisionPlayer) {
-        console.log(`${this.sprite} collide`)
-        player.jumped = 0
-        // if (this.platInfo.moveX) {
-        //   player.sprite.x += this.vx
-        //   gameScene.pivot.x += this.vx
-        // }
-        // if (this.platInfo.moveY) {
-        //   player.sprite.y += -this.vy
-        // }
+        this.player.jumped = 0
+        if (this.platInfo.moveX) {
+          // MATTER.Body.setVelocity(this.player.body, { x: this.vx, y: 0 })
+          MATTER.Body.translate(this.bPlayer, { x: this.vx, y: 0 })
+          this.sPlayer.x = this.bPlayer.position.x
+        }
         // if (this.platInfo.falling) {
         //   this.sprite.y += 2
         //   setTimeout(e => {
@@ -492,7 +548,15 @@ class CheckPointPlateform {
     this.sprite.y = this.y + this.sprite.height / 2
     this.body = Bodies.rectangle(this.sprite.x, this.sprite.y, this.sprite.width, this.sprite.height, this.option)
     World.add(engine.world, this.body)
-
     gameScene.addChild(this.sprite)
+  }
+
+  check (player) {
+    game.ticker.add(e => {
+      this.colisionPlayer = collideTest(this.sprite, player.sprite)
+      if (this.colisionPlayer) {
+        player.jumped = 0
+      }
+    })
   }
 }
