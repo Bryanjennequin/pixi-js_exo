@@ -4,7 +4,7 @@ import * as PIXI from "pixi.js"
 import * as MATTER from "matter-js"
 import { keyboard } from "./components/keyFunction"
 import { collideTest } from "./components/collideTest"
-import { pointCircle } from "intersects"
+
 const canvas = document.getElementById("canvas")
 const _width = window.innerWidth
 const _height = window.innerHeight
@@ -82,7 +82,7 @@ function start () {
           "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
           "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
           "background": PIXI.Loader.shared.resources["./assets/images/background.png"],
-          "background": PIXI.Loader.shared.resources["./assets/images/cloud.png"]
+          "cloud": PIXI.Loader.shared.resources["./assets/images/cloud.png"]
 
         }
         setLevel(sprites)
@@ -153,8 +153,8 @@ function setLevel (sprites) {
         { x: 1440 + 3000, y: _height / 2, model: "pause1" }
       ],
       classique: [
-        { x: 1440 / 2, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: true },
-        { x: 1440 - 300, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
+        { x: 1440 / 2, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
+        { x: 1440 / 2, y: _height / 2 - 200, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440 + 300, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440 + 900, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: false },
@@ -190,7 +190,22 @@ function setLevel (sprites) {
     plateform.display()
     plateform.check(player)
   }
+  for (let i = 0; i < 1; i++) {
+    const monstre = new Monstre(sprites.monstre)
+    monstre.display()
+    monstre.animate()
+    monstre.check(player, relique)
+  }
+  const allMonsters = []
+  setInterval(e => {
+    const monstre = new Monstre(sprites.monstre)
+    monstre.display()
+    monstre.animate()
+    monstre.check(player, relique)
+  }, 2000)
+  game.ticker.add(e => {
 
+  })
   setInterval(e => {
     const cloud = new Cloud(sprites)
     cloud.display()
@@ -247,39 +262,7 @@ class Cloud {
     })
   }
 }
-class Fanal {
-  constructor (sheet, fanalInfo) {
-    this.sheet = sheet
-    this.sprite = new PIXI.Sprite(this.sheet.textures["fanal_noFire.png"])
-    this.x = fanalInfo.x
-    this.y = fanalInfo.y - this.sprite.height / 3
-    this.activate = keyboard("e")
-  }
 
-  display () {
-    this.sprite.anchor.set(0)
-    this.sprite.width = this.sprite.width / 2
-    this.sprite.height = this.sprite.height / 2
-    this.fired = false
-    this.sprite.x = this.x
-    this.sprite.y = this.y
-    gameScene.addChild(this.sprite)
-  }
-
-  check (player) {
-    game.ticker.add(e => {
-      this.colision = collideTest(this.sprite, player.sprite)
-      this.activate.press = (e) => {
-        if (this.colision && !this.fired) {
-          this.fired = true
-          score++
-          console.log(score)
-          this.sprite.texture = this.sheet.textures["fanal.png"]
-        }
-      }
-    })
-  }
-}
 class Player {
   constructor (sheet) {
     this.sheet = sheet
@@ -315,7 +298,7 @@ class Player {
     this.frictionStatic = 1
     MATTER.Body.setInertia(this.body, Infinity)
     World.add(engine.world, this.body)
-    gameScene.addChild(this.sprite)
+    gameFg.addChild(this.sprite)
     console.log(this.sprite)
   }
 
@@ -369,6 +352,7 @@ class Player {
       }
 
       gameScene.pivot.x = this.body.position.x - window.innerWidth / 2
+      gameFg.pivot.x = this.body.position.x - window.innerWidth / 2
 
       if (this.sprite.y > _height + 300) {
         gameOver()
@@ -386,6 +370,7 @@ class Relique {
     this.right = keyboard("ArrowRight")
     this.up = keyboard("ArrowUp")
     this.down = keyboard("ArrowDown")
+    this.test = keyboard("z")
     this.vx = 0
     this.vy = 0
   }
@@ -400,13 +385,9 @@ class Relique {
     this.sprite.play()
     this.sprite.anchor.set(0.5)
     this.circle = new PIXI.Graphics()
-
     this.circle.beginFill(0x00000)
-    this.circle.drawCircle(this.sprite.x, this.sprite.y, 200)
+    this.circle.drawCircle(this.sprite.x, this.sprite.y, 150)
     this.circle.endFill()
-    this.circle.filters = new PIXI.filters.BlurFilter(8)
-
-    // this.circle.filters = [new PIXI.filters.BlurFilter(2)]
     gameScene.addChild(this.circle, this.sprite)
     gameScene.mask = this.circle
     gameBg.mask = this.circle
@@ -442,10 +423,52 @@ class Relique {
 
   animate () {
     game.ticker.add(e => {
-      this.circle.position.x = this.sprite.x - this.circle.width / 2
-      this.circle.position.y = this.sprite.y - this.circle.height
+      this.circle.position.x += this.vx
+      this.circle.position.y += this.vy
+
       this.sprite.x += this.vx
       this.sprite.y += this.vy
+
+      // this.circle.position.x = this.sprite.x
+      // this.circle.position.y = this.sprite.y
+    })
+  }
+}
+class Monstre {
+  constructor (sheet) {
+    this.sheet = sheet
+    this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.monstre)
+
+    this.x = Math.random() * _width
+    this.y = Math.random()
+  }
+
+  display () {
+    console.log()
+    this.sprite.x = 0
+    this.sprite.y = _height / 2
+    this.sprite.anchor.set(0.5)
+    this.sprite.animationSpeed = 0.167
+    this.sprite.play()
+    gameFg.addChild(this.sprite)
+  }
+
+  animate () {
+    game.ticker.add(e => {
+      this.sprite.x += 1
+    })
+  }
+
+  check (player, relique) {
+    game.ticker.add(e => {
+      if (this.sprite.visible === true) {
+        const dx = relique.sprite.x - this.sprite.x
+        const dy = relique.sprite.y - this.sprite.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        if (distance < 150 + this.sprite.width / 2) {
+          this.sprite.visible = false
+        }
+      }
     })
   }
 }
