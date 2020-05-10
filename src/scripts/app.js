@@ -32,62 +32,31 @@ gameFg.zIndex = Infinity
 game.stage.addChild(gameScene, gameBg, gameFg)
 
 function start () {
-  const start = keyboard("Enter")
-  const title = new PIXI.Text("Gravity Rush")
-  const sentence = new PIXI.Text("appuye sur ' entrer ' pour commencer ")
-  const touches = new PIXI.Text("avance avec ' d ', recule avec ' s ', saute avec ' z ', dash avec ' espace ' + direction voulue ")
-  const action = new PIXI.Text("Allume TOUT les braseros pour finir, appuye sur ' e ' à leur contact")
-  title.anchor.set(0.5)
-  title.x = _width / 2
-  title.y = _height / 2 - 100
-  title.style.fill = "white"
-  sentence.anchor.set(0.5)
-  sentence.x = _width / 2
-  sentence.y = _height / 2 - 50
-  sentence.style.fill = "white"
-  touches.anchor.set(0.5)
-  touches.x = _width / 2
-  touches.y = _height / 2
-  touches.style.fill = "white"
-  action.anchor.set(0.5)
-  action.x = _width / 2
-  action.y = _height / 2 + 50
-  action.style.fill = "white"
-  game.stage.addChild(title)
-  game.stage.addChild(sentence)
-  game.stage.addChild(touches)
-  game.stage.addChild(action)
+  PIXI.Loader.shared
+    .add("./assets/images/player/playerState.json")
+    .add("./assets/images/platforme/plateformeJump.json")
+    .add("./assets/images/platforme/plateform_start.json")
+    .add("./assets/images/platforme/plateform_pause2.json")
+    .add("./assets/images/monstre/monstreState.json")
+    .add("./assets/images/relique/relique.json")
+    .add("./assets/images/background.png")
+    .add("./assets/images/cloud.png")
+    .load(e => {})
+    .onComplete.add((e) => {
+      const sprites = {
+        "player": PIXI.Loader.shared.resources["./assets/images/player/playerState.json"].spritesheet,
+        "plateformeJump": PIXI.Loader.shared.resources["./assets/images/platforme/plateformeJump.json"].spritesheet,
+        "plateformeStart": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_start.json"].spritesheet,
+        "plateformePause2": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_pause2.json"].spritesheet,
+        "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
+        "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
+        "background": PIXI.Loader.shared.resources["./assets/images/background.png"],
+        "cloud": PIXI.Loader.shared.resources["./assets/images/cloud.png"]
 
-  start.press = (e) => {
-    game.stage.removeChild(title)
-    game.stage.removeChild(sentence)
-    game.stage.removeChild(touches)
-    game.stage.removeChild(action)
-    PIXI.Loader.shared
-      .add("./assets/images/player/playerState.json")
-      .add("./assets/images/platforme/plateformeJump.json")
-      .add("./assets/images/platforme/plateform_start.json")
-      .add("./assets/images/platforme/plateform_pause2.json")
-      .add("./assets/images/monstre/monstreState.json")
-      .add("./assets/images/relique/relique.json")
-      .add("./assets/images/background.png")
-      .add("./assets/images/cloud.png")
-      .load(e => {})
-      .onComplete.add((e) => {
-        const sprites = {
-          "player": PIXI.Loader.shared.resources["./assets/images/player/playerState.json"].spritesheet,
-          "plateformeJump": PIXI.Loader.shared.resources["./assets/images/platforme/plateformeJump.json"].spritesheet,
-          "plateformeStart": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_start.json"].spritesheet,
-          "plateformePause2": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_pause2.json"].spritesheet,
-          "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
-          "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
-          "background": PIXI.Loader.shared.resources["./assets/images/background.png"],
-          "cloud": PIXI.Loader.shared.resources["./assets/images/cloud.png"]
-
-        }
-        setLevel(sprites)
-      })
-  }
+      }
+      setLevel(sprites)
+      UI()
+    })
 }
 function gameOver () {
   const restart = keyboard("r")
@@ -138,7 +107,23 @@ function gameEnd () {
     document.location.reload(false)
   }
 }
-
+let sanity = 100
+let stamina = 100
+function UI () {
+  const sanityBar = new PIXI.Graphics()
+  const staminaBar = new PIXI.Graphics()
+  sanityBar.beginFill(0x801612, 0.2)
+  sanityBar.drawRoundedRect(0, 0, stamina, 5, 4)
+  sanityBar.endFill()
+  staminaBar.beginFill(0x108508, 0.2)
+  staminaBar.drawRoundedRect(250, 0, stamina, 5, 4)
+  staminaBar.endFill()
+  game.stage.addChild(staminaBar, sanityBar)
+  game.ticker.add(e => {
+    sanityBar.width = stamina
+    staminaBar.width = stamina
+  })
+}
 function setLevel (sprites) {
   engine = Engine.create()
   game.ticker.add(e => {
@@ -196,7 +181,7 @@ function setLevel (sprites) {
     monstre.animate()
     monstre.check(player, relique)
   }
-  const allMonsters = []
+
   setInterval(e => {
     const monstre = new Monstre(sprites.monstre)
     monstre.display()
@@ -223,6 +208,11 @@ function setLevel (sprites) {
   gameBg.zIndex = -1
 
   gameBg.addChild(sky, bg)
+  game.ticker.add(e => {
+    if (sanity <= 0) {
+      gameOver()
+    }
+  })
 }
 
 start()
@@ -317,7 +307,8 @@ class Player {
       this.force = 7.5
     }
     this.up.press = (e) => {
-      if (this.jumped <= 1) {
+      if (stamina > 0) {
+        stamina += -50
         this.forceJump = -0.03 * this.body.mass
         MATTER.Body.applyForce(this.body, this.body.position, { x: 0, y: this.forceJump })
         this.jumped++
@@ -444,7 +435,6 @@ class Monstre {
   }
 
   display () {
-    console.log()
     this.sprite.x = 0
     this.sprite.y = _height / 2
     this.sprite.anchor.set(0.5)
@@ -467,6 +457,10 @@ class Monstre {
         const distance = Math.sqrt(dx * dx + dy * dy)
         if (distance < 150 + this.sprite.width / 2) {
           this.sprite.visible = false
+        }
+        if (collideTest(this.sprite, player.sprite)) {
+          this.sprite.visible = false
+          sanity += -50
         }
       }
     })
@@ -547,6 +541,7 @@ class Plateform {
       this.colisionPlayer = collideTest(this.sprite, this.sPlayer)
       if (this.colisionPlayer) {
         this.player.jumped = 0
+        stamina = 100
         if (this.platInfo.moveX) {
           // MATTER.Body.setVelocity(this.player.body, { x: this.vx, y: 0 })
           MATTER.Body.translate(this.bPlayer, { x: this.vx, y: 0 })
@@ -603,6 +598,7 @@ class CheckPointPlateform {
       this.colisionPlayer = collideTest(this.sprite, player.sprite)
       if (this.colisionPlayer) {
         player.jumped = 0
+        stamina = 100
       }
     })
   }
