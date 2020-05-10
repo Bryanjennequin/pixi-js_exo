@@ -4,12 +4,14 @@ import * as PIXI from "pixi.js"
 import * as MATTER from "matter-js"
 import { keyboard } from "./components/keyFunction"
 import { collideTest } from "./components/collideTest"
+import { pointCircle } from "intersects"
 const canvas = document.getElementById("canvas")
 const _width = window.innerWidth
 const _height = window.innerHeight
-const score = 0
+
 const gameScene = new PIXI.Container()
 const gameBg = new PIXI.Container()
+const gameFg = new PIXI.Container()
 let engine
 
 const Engine = MATTER.Engine
@@ -18,17 +20,18 @@ const Bodies = MATTER.Bodies
 const game = new PIXI.Application({
   view: canvas,
   width: _width,
-  height: _height,
-  backgroundColor: 0x77B5FE
+  height: _height
+
+  // backgroundColor: 0x77B5FE
 
 })
 game.stage.sortableChildren = true
 gameScene.sortableChildren = true
 game.ticker.maxFPS = 60
-game.stage.addChild(gameScene, gameBg)
+gameFg.zIndex = Infinity
+game.stage.addChild(gameScene, gameBg, gameFg)
 
 function start () {
-  engine = Engine.create()
   const start = keyboard("Enter")
   const title = new PIXI.Text("Gravity Rush")
   const sentence = new PIXI.Text("appuye sur ' entrer ' pour commencer ")
@@ -85,9 +88,6 @@ function start () {
         setLevel(sprites)
       })
   }
-  game.ticker.add(e => {
-    Engine.update(engine)
-  })
 }
 function gameOver () {
   const restart = keyboard("r")
@@ -140,14 +140,11 @@ function gameEnd () {
 }
 
 function setLevel (sprites) {
-  const bg = PIXI.Sprite.from("./assets/images/background.png")
-  bg.anchor.set(0, 1)
-  bg.x = 0
-  bg.y = _height + 300
-  gameBg.zIndex = -1
-  gameBg.addChild(bg)
-  const allPlateform = []
-  const allPlateformSpecial = []
+  engine = Engine.create()
+  game.ticker.add(e => {
+    Engine.update(engine)
+  })
+
   const platInfo =
     {
       special: [
@@ -156,7 +153,7 @@ function setLevel (sprites) {
         { x: 1440 + 3000, y: _height / 2, model: "pause1" }
       ],
       classique: [
-        { x: 1440 / 2, y: _height / 2, size: "longue", moveX: false, moveY: true, falling: false },
+        { x: 1440 / 2, y: _height / 2, size: "longue", moveX: false, moveY: false, falling: true },
         { x: 1440 - 300, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
         { x: 1440 + 300, y: _height / 2, size: "petite", moveX: false, moveY: false, falling: false },
@@ -181,29 +178,36 @@ function setLevel (sprites) {
   relique.display()
   relique.animate()
   relique.control()
+
   for (let i = 0; i < platInfo.classique.length; i++) {
     const plateform = new Plateform(sprites.plateformeJump, platInfo.classique[i], player)
-    allPlateform.push(plateform)
+    plateform.display()
+    plateform.animate()
+    plateform.check()
   }
   for (let i = 0; i < platInfo.special.length; i++) {
     const plateform = new CheckPointPlateform(sprites, platInfo.special[i])
-    allPlateformSpecial.push(plateform)
+    plateform.display()
+    plateform.check(player)
   }
-  for (let i = 0; i < allPlateformSpecial.length; i++) {
-    allPlateformSpecial[i].display()
-    allPlateformSpecial[i].check(player)
-  }
-  for (let i = 0; i < allPlateform.length; i++) {
-    allPlateform[i].display()
-    allPlateform[i].animate()
-    allPlateform[i].check()
-  }
-  // const clouds = []
-  // setInterval(e => {
-  //   const cloud = new Cloud(sprites)
-  //   clouds.push(cloud)
-  //   console.log(clouds)
-  // }, 2000)
+
+  setInterval(e => {
+    const cloud = new Cloud(sprites)
+    cloud.display()
+    cloud.animate()
+  }, 2000)
+  const bg = PIXI.Sprite.from("./assets/images/background.png")
+  const sky = new PIXI.Graphics()
+  sky.beginFill(0x77B5FE)
+  sky.drawRect(0, 0, gameScene.width, gameScene.height)
+  sky.endFill()
+  // gameFg.addChild(rect)
+  bg.anchor.set(0, 1)
+  bg.x = 0
+  bg.y = _height + 300
+  gameBg.zIndex = -1
+
+  gameBg.addChild(sky, bg)
 }
 
 start()
@@ -215,18 +219,22 @@ class Cloud {
     this.y = Math.random() * _height / 2
     this.sheet = sheet
     this.sprite = new PIXI.Sprite.from("./assets/images/cloud_2.png")
-    this.vx = Math.random() * 5 + 2
+    this.vx = Math.random() * 2 + 0.1
   }
 
   display () {
     // if (Math.random() > 0.5) {
     //   this.sprite.texture = this.sheet.textures["cloud_2.png"]
     // }
-
+    if (Math.random() > 0.333) {
+      this.sprite.zIndex = -3
+    } else {
+      this.sprite.zIndex = 1000
+    }
     this.sprite.x = this.x
     this.sprite.y = this.y
 
-    gameBg.addChild(this.sprite)
+    gameScene.addChild(this.sprite)
   }
 
   animate () {
@@ -234,7 +242,7 @@ class Cloud {
       this.sprite.x += -this.vx
       // console.log(`${this.sprite.x} /// ${gameScene.pivot.x}`)
       if (this.sprite.x < gameScene.pivot.x - this.sprite.width) {
-        gameBg.removeChild(this.sprite)
+        gameScene.removeChild(this.sprite)
       }
     })
   }
@@ -308,7 +316,7 @@ class Player {
     MATTER.Body.setInertia(this.body, Infinity)
     World.add(engine.world, this.body)
     gameScene.addChild(this.sprite)
-    console.log(this.body.collisionFilter)
+    console.log(this.sprite)
   }
 
   control () {
@@ -383,11 +391,26 @@ class Relique {
   }
 
   display () {
+    // mask
+
+    this.sprite.x = 200
+    this.sprite.y = _height / 2
     this.sprite.animationSpeed = 0.167
     this.sprite.zIndex = 101
     this.sprite.play()
-    gameScene.addChild(this.sprite)
-    console.log(this.sheet)
+    this.sprite.anchor.set(0.5)
+    this.circle = new PIXI.Graphics()
+
+    this.circle.beginFill(0x00000)
+    this.circle.drawCircle(this.sprite.x, this.sprite.y, 200)
+    this.circle.endFill()
+    this.circle.filters = new PIXI.filters.BlurFilter(8)
+
+    // this.circle.filters = [new PIXI.filters.BlurFilter(2)]
+    gameScene.addChild(this.circle, this.sprite)
+    gameScene.mask = this.circle
+    gameBg.mask = this.circle
+    console.log(this.circle)
   }
 
   control () {
@@ -419,6 +442,8 @@ class Relique {
 
   animate () {
     game.ticker.add(e => {
+      this.circle.position.x = this.sprite.x - this.circle.width / 2
+      this.circle.position.y = this.sprite.y - this.circle.height
       this.sprite.x += this.vx
       this.sprite.y += this.vy
     })
@@ -440,14 +465,16 @@ class Plateform {
     this.gravity = 0
     this.initialX = this.x
     this.willFall = false
-    this.option = {
-      isStatic: true
-    }
   }
 
   display () {
     this.sprite.anchor.set(0.5)
-    this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, this.option)
+    if (this.platInfo.falling) {
+      this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, { isSleeping: true })
+    } else {
+      this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, { isStatic: true })
+    }
+
     this.body.friction = 1
     this.body.frictionStatic = 1
     this.sprite.x = this.body.position.x
@@ -457,19 +484,16 @@ class Plateform {
   }
 
   animate () {
-    if (this.platInfo.moveY) {
-      game.ticker.add(e => {
+    game.ticker.add(e => {
+      if (this.platInfo.moveY) {
         if (this.sprite.y < -300 || this.sprite.y > _height + 300) {
           this.vy *= -1
         }
 
         MATTER.Body.translate(this.body, { x: 0, y: this.vy })
-        this.sprite.y = this.body.position.y
-      })
-    }
+      }
 
-    if (this.platInfo.moveX) {
-      game.ticker.add(e => {
+      if (this.platInfo.moveX) {
         // console.log(`${this.sprite.x}/// ${this.initialX}`)
 
         if (this.sprite.x > this.initialX + 500) {
@@ -481,9 +505,9 @@ class Plateform {
         // MATTER.Body.applyForce(this.body, this.body.position, {x : this.vx, y:0})
         // MATTER.Body.setVelocity(this.body, { x: this.vx, y: 0 })
         MATTER.Body.translate(this.body, { x: this.vx, y: 0 })
-        this.sprite.x = this.body.position.x
-      })
-    }
+      }
+      this.sprite.y = this.body.position.y
+      this.sprite.x = this.body.position.x
     // if (this.platInfo.falling) {
     //   game.ticker.add(e => {
     //     if (this.willFall) {
@@ -492,6 +516,7 @@ class Plateform {
     //     }
     //   })
     // }
+    })
   }
 
   check () {
@@ -504,12 +529,11 @@ class Plateform {
           MATTER.Body.translate(this.bPlayer, { x: this.vx, y: 0 })
           this.sPlayer.x = this.bPlayer.position.x
         }
-        // if (this.platInfo.falling) {
-        //   this.sprite.y += 2
-        //   setTimeout(e => {
-        //     this.willFall = true
-        //   }, 500)
-        // }
+        if (this.platInfo.falling) {
+          setTimeout(e => {
+            MATTER.Sleeping.set(this.body, false)
+          }, 5000)
+        }
       }
     })
   }
