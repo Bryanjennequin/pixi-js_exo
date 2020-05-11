@@ -221,22 +221,22 @@ class UiBar {
   display () {
     // this.bar.anchor.set(0.5)
     this.bar.scale.set(0.1)
-    this.bar.x = this.x
-    this.bar.y = this.y
+    this.deco.scale.set(0.3)
     this.deco.anchor.set(0.5)
-    this.deco.x = -145
-    this.deco.y = -9
+    this.deco.x = this.x
+    this.deco.y = this.y
+    this.bar.x = this.x + 17
+    this.bar.y = this.y + 1
     this.deco.zIndex = 10
-    this.deco.scale.set(2.6)
-    this.bar.addChild(this.deco)
-    game.stage.addChild(this.bar)
 
+    this.deco.zIndex = 100
+    game.stage.addChild(this.bar, this.deco)
     console.log(this.bar)
   }
 
   animate () {
     game.ticker.add(e => {
-      this.bar.width = stamina
+      this.bar.
     })
   }
 }
