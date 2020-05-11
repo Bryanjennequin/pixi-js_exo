@@ -88,9 +88,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>4096</int>
+            <int>2048</int>
             <key>height</key>
-            <int>4096</int>
+            <int>2048</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>plateform_pause2.json</filename>
+                <filename>ui.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,9 +181,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">plateform_pause2_anim_1.png</key>
-            <key type="filename">plateform_pause2_anim_2.png</key>
-            <key type="filename">plateform_pause2_anim_3.png</key>
+            <key type="filename">decoBar.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -192,18 +190,34 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>400,400,800,800</rect>
+                <rect>49,25,97,50</rect>
                 <key>scale9Paddings</key>
-                <rect>400,400,800,800</rect>
+                <rect>49,25,97,50</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">sanityBar.png</key>
+            <key type="filename">staminaBar.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>219,25,437,50</rect>
+                <key>scale9Paddings</key>
+                <rect>219,25,437,50</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>plateform_pause2_anim_1.png</filename>
-            <filename>plateform_pause2_anim_2.png</filename>
-            <filename>plateform_pause2_anim_3.png</filename>
+            <filename>decoBar.png</filename>
+            <filename>sanityBar.png</filename>
+            <filename>staminaBar.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -2,6 +2,7 @@
 "use strict"
 import * as PIXI from "pixi.js"
 import * as MATTER from "matter-js"
+import * as GSAP from "gsap"
 import { keyboard } from "./components/keyFunction"
 import { collideTest } from "./components/collideTest"
 
@@ -20,9 +21,9 @@ const Bodies = MATTER.Bodies
 const game = new PIXI.Application({
   view: canvas,
   width: _width,
-  height: _height
+  height: _height,
 
-  // backgroundColor: 0x77B5FE
+  backgroundColor: 0x0C0C0C
 
 })
 game.stage.sortableChildren = true
@@ -40,7 +41,8 @@ function start () {
     .add("./assets/images/monstre/monstreState.json")
     .add("./assets/images/relique/relique.json")
     .add("./assets/images/background.png")
-    .add("./assets/images/cloud.png")
+    .add("./assets/images/cloud/cloud.json")
+    .add("./assets/images/UI/ui.json")
     .load(e => {})
     .onComplete.add((e) => {
       const sprites = {
@@ -51,11 +53,12 @@ function start () {
         "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
         "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
         "background": PIXI.Loader.shared.resources["./assets/images/background.png"],
-        "cloud": PIXI.Loader.shared.resources["./assets/images/cloud.png"]
+        "cloud": PIXI.Loader.shared.resources["./assets/images/cloud/cloud.json"].spritesheet,
+        "ui": PIXI.Loader.shared.resources["./assets/images/UI/ui.json"].spritesheet
 
       }
       setLevel(sprites)
-      UI()
+      UI(sprites.ui)
     })
 }
 function gameOver () {
@@ -109,20 +112,15 @@ function gameEnd () {
 }
 let sanity = 100
 let stamina = 100
-function UI () {
-  const sanityBar = new PIXI.Graphics()
-  const staminaBar = new PIXI.Graphics()
-  sanityBar.beginFill(0x801612, 0.2)
-  sanityBar.drawRoundedRect(0, 0, stamina, 5, 4)
-  sanityBar.endFill()
-  staminaBar.beginFill(0x108508, 0.2)
-  staminaBar.drawRoundedRect(250, 0, stamina, 5, 4)
-  staminaBar.endFill()
-  game.stage.addChild(staminaBar, sanityBar)
-  game.ticker.add(e => {
-    sanityBar.width = stamina
-    staminaBar.width = stamina
-  })
+let staminaAnim = 100
+
+function UI (sprite) {
+  const type = ["sanity", "stamina"]
+  for (let i = 0; i < type.length; i++) {
+    const hud = new UiBar(sprite, type[i], i)
+    hud.display()
+    hud.animate()
+  }
 }
 function setLevel (sprites) {
   engine = Engine.create()
@@ -175,24 +173,18 @@ function setLevel (sprites) {
     plateform.display()
     plateform.check(player)
   }
-  for (let i = 0; i < 1; i++) {
-    const monstre = new Monstre(sprites.monstre)
-    monstre.display()
-    monstre.animate()
-    monstre.check(player, relique)
-  }
 
   setInterval(e => {
-    const monstre = new Monstre(sprites.monstre)
+    const monstre = new Monstre(sprites.monstre, player, relique)
     monstre.display()
     monstre.animate()
-    monstre.check(player, relique)
-  }, 2000)
+    monstre.check()
+  }, 5000)
   game.ticker.add(e => {
 
   })
   setInterval(e => {
-    const cloud = new Cloud(sprites)
+    const cloud = new Cloud(sprites.cloud)
     cloud.display()
     cloud.animate()
   }, 2000)
@@ -216,26 +208,58 @@ function setLevel (sprites) {
 }
 
 start()
+class UiBar {
+  constructor (sprite, type, i) {
+    this.sheet = sprite
+    this.type = type
+    this.deco = new PIXI.Sprite(this.sheet.textures["decoBar.png"])
+    this.bar = new PIXI.Sprite(this.sheet.textures[`${this.type}Bar.png`])
+    this.x = 100 + 150 * i
+    this.y = _height - 100
+  }
 
+  display () {
+    // this.bar.anchor.set(0.5)
+    this.bar.scale.set(0.1)
+    this.bar.x = this.x
+    this.bar.y = this.y
+    this.deco.anchor.set(0.5)
+    this.deco.x = -145
+    this.deco.y = -9
+    this.deco.zIndex = 10
+    this.deco.scale.set(2.6)
+    this.bar.addChild(this.deco)
+    game.stage.addChild(this.bar)
+
+    console.log(this.bar)
+  }
+
+  animate () {
+    game.ticker.add(e => {
+      this.bar.width = stamina
+    })
+  }
+}
 class Cloud {
   constructor (sheet) {
     this.playerPos = gameScene.pivot.x
     this.x = this.playerPos + _width
     this.y = Math.random() * _height / 2
     this.sheet = sheet
-    this.sprite = new PIXI.Sprite.from("./assets/images/cloud_2.png")
+    this.sprite = new PIXI.Sprite(this.sheet.textures["cloud_1.png"])
     this.vx = Math.random() * 2 + 0.1
   }
 
   display () {
-    // if (Math.random() > 0.5) {
-    //   this.sprite.texture = this.sheet.textures["cloud_2.png"]
-    // }
+    if (Math.random() > 0.5) {
+      this.sprite.texture = this.sheet.textures["cloud_2.png"]
+    }
     if (Math.random() > 0.333) {
       this.sprite.zIndex = -3
     } else {
       this.sprite.zIndex = 1000
     }
+    this.sprite.scale.set(0.3)
     this.sprite.x = this.x
     this.sprite.y = this.y
 
@@ -309,6 +333,7 @@ class Player {
     this.up.press = (e) => {
       if (stamina > 0) {
         stamina += -50
+
         this.forceJump = -0.03 * this.body.mass
         MATTER.Body.applyForce(this.body, this.body.position, { x: 0, y: this.forceJump })
         this.jumped++
@@ -367,8 +392,6 @@ class Relique {
   }
 
   display () {
-    // mask
-
     this.sprite.x = 200
     this.sprite.y = _height / 2
     this.sprite.animationSpeed = 0.167
@@ -377,7 +400,7 @@ class Relique {
     this.sprite.anchor.set(0.5)
     this.circle = new PIXI.Graphics()
     this.circle.beginFill(0x00000)
-    this.circle.drawCircle(this.sprite.x, this.sprite.y, 150)
+    this.circle.drawCircle(this.sprite.x, this.sprite.y, 100)
     this.circle.endFill()
     gameScene.addChild(this.circle, this.sprite)
     gameScene.mask = this.circle
@@ -426,17 +449,26 @@ class Relique {
   }
 }
 class Monstre {
-  constructor (sheet) {
+  constructor (sheet, player, relique) {
     this.sheet = sheet
+    this.player = player
+    this.relique = relique
     this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.monstre)
-
-    this.x = Math.random() * _width
-    this.y = Math.random()
+    this.gameFgPos = gameFg.pivot.x
+    this.x = [this.gameFgPos + _width, this.gameFgPos, Math.floor(Math.random() * _width)]
+    this.y = [-100, _height + 100, Math.random() * _height]
+    this.random = Math.floor(Math.random() * 3)
   }
 
   display () {
-    this.sprite.x = 0
-    this.sprite.y = _height / 2
+    if (this.random === this.x.length - 1) {
+      this.sprite.x = this.x[this.random]
+      this.sprite.y = this.y[Math.floor(Math.random() * 2)]
+    } else {
+      this.sprite.x = this.x[Math.floor(Math.random() * 2)]
+      this.sprite.y = this.y[this.y.length - 1]
+    }
+
     this.sprite.anchor.set(0.5)
     this.sprite.animationSpeed = 0.167
     this.sprite.play()
@@ -444,21 +476,19 @@ class Monstre {
   }
 
   animate () {
-    game.ticker.add(e => {
-      this.sprite.x += 1
-    })
+    GSAP.gsap.to(this.sprite, { x: this.player.sprite.x, y: this.player.sprite.y, duration: 5 })
   }
 
-  check (player, relique) {
+  check () {
     game.ticker.add(e => {
       if (this.sprite.visible === true) {
-        const dx = relique.sprite.x - this.sprite.x
-        const dy = relique.sprite.y - this.sprite.y
+        const dx = this.relique.sprite.x - this.sprite.x
+        const dy = this.relique.sprite.y - this.sprite.y
         const distance = Math.sqrt(dx * dx + dy * dy)
-        if (distance < 150 + this.sprite.width / 2) {
+        if (distance < this.relique.circle.width / 2 + this.sprite.width / 2) {
           this.sprite.visible = false
         }
-        if (collideTest(this.sprite, player.sprite)) {
+        if (collideTest(this.sprite, this.player.sprite)) {
           this.sprite.visible = false
           sanity += -50
         }
@@ -542,6 +572,7 @@ class Plateform {
       if (this.colisionPlayer) {
         this.player.jumped = 0
         stamina = 100
+        staminaAnim = 100
         if (this.platInfo.moveX) {
           // MATTER.Body.setVelocity(this.player.body, { x: this.vx, y: 0 })
           MATTER.Body.translate(this.bPlayer, { x: this.vx, y: 0 })
@@ -599,6 +630,7 @@ class CheckPointPlateform {
       if (this.colisionPlayer) {
         player.jumped = 0
         stamina = 100
+        staminaAnim = 100
       }
     })
   }

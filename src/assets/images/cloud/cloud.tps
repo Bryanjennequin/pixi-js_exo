@@ -88,9 +88,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>4096</int>
+            <int>2048</int>
             <key>height</key>
-            <int>4096</int>
+            <int>2048</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>plateform_pause2.json</filename>
+                <filename>cloud.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,9 +181,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">plateform_pause2_anim_1.png</key>
-            <key type="filename">plateform_pause2_anim_2.png</key>
-            <key type="filename">plateform_pause2_anim_3.png</key>
+            <key type="filename">cloud_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -192,18 +190,32 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>400,400,800,800</rect>
+                <rect>140,75,279,150</rect>
                 <key>scale9Paddings</key>
-                <rect>400,400,800,800</rect>
+                <rect>140,75,279,150</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">cloud_2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>208,75,415,150</rect>
+                <key>scale9Paddings</key>
+                <rect>208,75,415,150</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>plateform_pause2_anim_1.png</filename>
-            <filename>plateform_pause2_anim_2.png</filename>
-            <filename>plateform_pause2_anim_3.png</filename>
+            <filename>cloud_1.png</filename>
+            <filename>cloud_2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
