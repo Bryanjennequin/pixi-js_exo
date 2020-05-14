@@ -14,6 +14,7 @@ PIXI.Loader.shared
   .add("./assets/images/cloud/cloud.json")
   .add("./assets/images/UI/ui.json")
   .load(e => {})
-
-menu()
-game()
+  .onComplete.add(e => {
+    menu()
+    game()
+  })

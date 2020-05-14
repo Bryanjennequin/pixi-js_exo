@@ -1,7 +1,6 @@
 "use strict"
 import * as PIXI from "pixi.js"
 import * as GSAP from "gsap"
-import { keyboard } from "../components/keyFunction"
 export function menu () {
   const _width = window.innerWidth
   const _height = window.innerHeight
@@ -14,10 +13,7 @@ export function menu () {
     control: document.querySelector("#control"),
     level: document.querySelector("#level")
   }
-  const enter = keyboard("Enter")
-  enter.press = (e) => {
-    canvasStart.destroy()
-  }
+
   for (let i = 0; i < navEl.length; i++) {
     navEl[i].addEventListener("click", (e) => {
       const test = i
@@ -85,7 +81,9 @@ export function menu () {
   const circle = new Circles()
   circle.display()
   circle.animate()
+
   setInterval(createCloud, 3000)
+
   function createCloud () {
     const cloud = new Cloud()
     cloud.display()

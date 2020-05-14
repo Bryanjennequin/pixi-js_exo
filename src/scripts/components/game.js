@@ -15,6 +15,7 @@ export function game () {
     cloudFunc,
     engine
   let started = false
+  let paused = false
   const allAnim = []
   const canvasGame = document.getElementById("canvasGame")
   const _width = window.innerWidth
@@ -74,27 +75,36 @@ export function game () {
     setLevel(sprites)
     UI(sprites.ui)
   }
+  const pauseScreen = document.querySelector("#pause")
   const pause = keyboard("p")
-  const m = keyboard("m")
-  pause.press = e => {
-    game.ticker.stop()
-    clearInterval(monsterInterval)
-    clearInterval(cloudInterval)
-    for (let i = 0; i < allAnim.length; i++) {
-      allAnim[i].pause()
-    }
-    // game.ticker.stop()
-  }
-  m.press = e => {
-    game.ticker.start()
-    monsterInterval = setInterval(monsterFunc, 5000)
-    cloudInterval = setInterval(cloudFunc, 5000)
-    for (let i = 0; i < allAnim.length; i++) {
-      allAnim[i].play()
-    }
+  const restart = keyboard("Enter")
 
-    // game.ticker.start()
+  restart.press = e => {
+    if (paused === true) {
+      pauseScreen.style.display = "none"
+      game.ticker.start()
+      monsterInterval = setInterval(monsterFunc, 5000)
+      cloudInterval = setInterval(cloudFunc, 5000)
+      for (let i = 0; i < allAnim.length; i++) {
+        allAnim[i].play()
+      }
+      paused = false
+    }
   }
+
+  pause.press = e => {
+    if (paused === false) {
+      pauseScreen.style.display = "block"
+      game.ticker.stop()
+      clearInterval(monsterInterval)
+      clearInterval(cloudInterval)
+      for (let i = 0; i < allAnim.length; i++) {
+        allAnim[i].pause()
+      }
+      paused = true
+    }
+  }
+
   function gameOver () {
     const restart = keyboard("r")
     const title = new PIXI.Text("Game Over")

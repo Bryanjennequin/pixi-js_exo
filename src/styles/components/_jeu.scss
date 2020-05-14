@@ -15,7 +15,7 @@ ul, li{
  display: block;
   
 }
-#story, #control, #level{
+#story, #control, #level, #pause{
   display: none;
 }
 #canvasStart{
@@ -44,7 +44,13 @@ ul, li{
   z-index: 1;
   justify-content: center;
   bottom: 144px;
-  
+  &--pause{
+    display: block;
+    position: relative;
+    text-align: center;
+    bottom: 0;
+
+  }
 
 }
 .nav{
@@ -65,12 +71,17 @@ ul, li{
     }
   }
 }
+
 .menu{
   width: 100vw;
   height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
+  &--pause{
+    background-color: rgba($c__black--light, $alpha: .8);
+    
+  }
 }
 .control-touch{
   position: absolute;
@@ -79,9 +90,9 @@ ul, li{
   left: 0;
   right: 0;
   margin: 0 auto;
-  bottom: 200px;
+  bottom: 20vh;
   justify-content: space-between;
-  align-items: center;
+
   &__el{
     width: 300px;
     text-align: center;
