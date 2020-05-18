@@ -4,19 +4,17 @@
   <title>MVP/TFE/GRAVITY RUSH</title>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"> 
-  <link rel="stylesheet" type="text/css" href="styles/app.css">
+  <link rel="stylesheet" type="text/css" href="../styles/app.css">
   
 </head>
 <body>
-  
-
   <section id="menu" class="menu ">
     <nav>
       <ul class="nav">
-        <li class="nav__el nav__el--actif" data-name="mainMenu">Menu principal</li>
-        <li class="nav__el" data-name="story">Histoire</li>
-        <li class="nav__el" data-name="control">Contrôle</li>
-        <li class="nav__el" data-name="level">Niveaux</li>
+        <li class="nav__el nav__el--actif"><button data-name="mainMenu">Menu principal</button></li>
+        <li class="nav__el" ><button data-name="story">Histoire</button></li>
+        <li class="nav__el" ><button data-name="control">Contrôle</button></li>
+        <li class="nav__el" ><button data-name="level">Niveaux</button></li>
       </ul>
     </nav>
     <div id="mainMenu">
@@ -91,11 +89,13 @@
       </div>
     </div>
     <div id="level" class="level">
-      <h2 class="title title--small">Niveaux</h1>
+      <h2 class="title title--small">Niveaux</h2>
+      <ul class="level-list">
+
+      </ul>
     </div>
   </section>
-  <section id="pause" class="menu menu--pause"> 
-    <div class="control control--game">
+  <section id="pause" class="menu menu--pause control control--game"> 
       <h2 class="title title--small">Le jeu est en pause</h2>
       <p class="para para--pause">Appuye sur entrée pour reprendre</p>
       <div class="control-touch">
@@ -155,9 +155,21 @@
           <p>Utilise les flèches pour déplacer la relique</p>
         </div>
       </div>
-    </div>
+  </section>
+  <section id="gameOver" class="menu">
+    <h2 class="title title--gameOver">Game Over</h2>
+    <p id="deathSentence" class="para">Tu es tombé(e) dans l'oubli.</p>
+    <p class="para">Appuye sur R pour recommencer</p>
+  </section>
+  <section id="gameEnd" class="menu">
+    <h2 class="title title--gameOver">Bravo tu as terminer ce niveau!</h2>
+    <ul>
+      <li><button>Revenir au menu principal </button></li>
+      <li><button>Continuer ? </button></li>
+    </ul>
+
   </section>
   <canvas id="canvasGame"></canvas>
-  <script src="scripts/app.js"></script>
+  <script src="../scripts/app.js"></script>
 </body>
 </html>

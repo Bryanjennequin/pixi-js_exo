@@ -1,33 +1,10 @@
 "use strict"
 import * as PIXI from "pixi.js"
 import * as GSAP from "gsap"
+import { platInfo, _width, _height } from "./info"
 export function menu () {
-  const _width = window.innerWidth
-  const _height = window.innerHeight
   const navMenu = document.querySelector(".nav")
   const navEl = document.querySelectorAll(".nav__el")
-
-  const menu = {
-    mainMenu: document.querySelector("#mainMenu"),
-    story: document.querySelector("#story"),
-    control: document.querySelector("#control"),
-    level: document.querySelector("#level")
-  }
-
-  for (let i = 0; i < navEl.length; i++) {
-    navEl[i].addEventListener("click", (e) => {
-      const test = i
-      e.target.classList.add("nav__el--actif")
-      const name = e.target.getAttribute("data-name")
-      for (let i = 0; i < Object.keys(menu).length; i++) {
-        Object.values(menu)[i].style.display = "none"
-        navEl[i].classList.remove("nav__el--actif")
-      }
-      menu[name].style.display = "block"
-      navEl[test].classList.add("nav__el--actif")
-    })
-  }
-
   const bgCont = new PIXI.Container()
   const bg = PIXI.Sprite.from("./assets/images/background.png")
   const sky = new PIXI.Graphics()
@@ -38,7 +15,37 @@ export function menu () {
     backgroundColor: 0x0a0a0a
 
   })
+  const menu = {
+    mainMenu: document.querySelector("#mainMenu"),
+    story: document.querySelector("#story"),
+    control: document.querySelector("#control"),
+    level: document.querySelector("#level")
+  }
+  const levelList = document.querySelector(".level-list")
+  for (let i = 0; i < platInfo.length; i++) {
+    const li = document.createElement("li")
+    li.classList.add("level-list__el")
+    li.innerHTML = `
+    <img src="../assets/images/levelPicture/level_1.png">
+    <p>Niveau ${i + 1}</p>
+    `
+    levelList.appendChild(li)
+  }
+  for (let i = 0; i < navEl.length; i++) {
+    navEl[i].addEventListener("click", (e) => {
+      const test = i
+      e.target.parentNode.classList.add("nav__el--actif")
+      console.log(e.target)
 
+      const name = e.target.getAttribute("data-name")
+      for (let i = 0; i < Object.keys(menu).length; i++) {
+        Object.values(menu)[i].style.display = "none"
+        navEl[i].classList.remove("nav__el--actif")
+      }
+      menu[name].style.display = "block"
+      navEl[test].classList.add("nav__el--actif")
+    })
+  }
   canvasStart.stage.addChild(bgCont)
   sky.beginFill(0x77B5FE)
   sky.drawRect(0, 0, _width, _height)
@@ -82,14 +89,11 @@ export function menu () {
   circle.display()
   circle.animate()
 
-  setInterval(createCloud, 3000)
-
   function createCloud () {
     const cloud = new Cloud()
     cloud.display()
     cloud.animate()
   }
-
   class Cloud {
     constructor () {
       this.sprites = PIXI.Loader.shared.resources["./assets/images/cloud/cloud.json"].spritesheet
@@ -119,10 +123,13 @@ export function menu () {
       canvasStart.ticker.add(e => {
         this.sprite.x += -this.vx
         // console.log(`${this.sprite.x} /// ${gameScene.pivot.x}`)
-        if (this.sprite.x < 0) {
-          bgCont.removeChild(this.sprite)
+        if (this.sprite.x < -this.sprite.width) {
+          this.sprite.x = this.x
         }
       })
     }
+  }
+  for (let i = 0; i <= 2; i++) {
+    createCloud()
   }
 }
