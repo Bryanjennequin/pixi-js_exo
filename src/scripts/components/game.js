@@ -5,7 +5,6 @@ import * as MATTER from "matter-js"
 import * as GSAP from "gsap"
 import { keyboard } from "../components/keyFunction"
 import { collideTest } from "../components/collideTest"
-import { menu } from "../components/menu"
 import { platInfo, _height, _width, scaleRatio } from "./info"
 GSAP.gsap.ticker.fps(60)
 export function game () {
@@ -18,10 +17,12 @@ export function game () {
     sprites,
     relique,
     sanity,
-    stamina
+    stamina,
+    currentLevel
 
   let started = false
   let paused = false
+  let clouds = []
   let monstersObj = []
   let platObj = []
   let platSpeObj = []
@@ -86,7 +87,8 @@ export function game () {
       "ui": PIXI.Loader.shared.resources["./assets/images/UI/ui.json"].spritesheet
 
     }
-    setLevel(sprites, level)
+    currentLevel = level
+    setLevel(sprites, currentLevel)
   }
   const pauseScreen = document.querySelector("#pause")
   const pause = keyboard("p")
@@ -128,25 +130,22 @@ export function game () {
     }
     deathSentence.innerHTML = dieMethod
     deathSentence.classList.add("para--gameOver")
-  }
-  const test = keyboard("l")
-  test.press = e => {
     reset()
-    console.log("test")
-    setLevel(sprites, 1)
   }
-  function gameEnd () {
-    const test2 = keyboard("k")
-    const gameEnds = document.querySelector("#gameEnd")
-    gameEnds.style.display = "none"
-    gameEnds.style.display = "block"
-    test2.press = e => {
 
+  function gameEnd () {
+    const gameEnds = document.querySelector("#gameEnd")
+    gameEnds.style.display = "block"
+    reset()
+    const restart = keyboard("Enter")
+    restart.press = (e) => {
+      document.location.reload(false)
     }
   }
   function reset () {
     clearInterval(monsterInterval)
     clearInterval(cloudInterval)
+    game.ticker.remove(addTickersFunc)
     gameScene.pivot.x = 0
     gameFg.pivot.x = 0
     World.clear(engine.world)
@@ -171,22 +170,34 @@ export function game () {
       platObj[i].animate = null
       platObj[i] = null
     }
+    for (let i = 0; i < clouds.length; i++) {
+      clouds[i].display = null
+      clouds[i].animate = null
+      clouds[i] = null
+    }
     for (let i = 0; i < allAnim.length; i++) {
       allAnim[i].kill()
     }
     allAnim = []
+    clouds = []
     player.display = null
     player.animate = null
     player.control = null
+    player.left.press = null
+    player.right.press = null
+    player.up.press = null
     player = null
     relique.display = null
     relique.animate = null
     relique.control = null
+    relique.left.press = null
+    relique.right.press = null
+    relique.up.press = null
+    relique.down.press = null
     relique = null
     platObj = []
     platSpeObj = []
     monstersObj = []
-    game.ticker.remove(addTickersFunc)
   }
   const type = ["sanity", "stamina"]
   const huds = []
@@ -231,7 +242,7 @@ export function game () {
     cloudFunc = function createCloud () {
       const cloud = new Cloud(sprites.cloud)
       cloud.display()
-      cloud.animate()
+      clouds.push(cloud)
     }
     monsterInterval = setInterval(monsterFunc, 5000)
     cloudInterval = setInterval(cloudFunc, 5000)
@@ -240,7 +251,6 @@ export function game () {
     sky.beginFill(0x77B5FE)
     sky.drawRect(0, 0, gameScene.width, gameScene.height)
     sky.endFill()
-    // gameFg.addChild(rect)
     bg.anchor.set(0, 1)
     bg.x = 0
     bg.y = _height + 300
@@ -266,9 +276,15 @@ export function game () {
       platObj[i].animate()
       platObj[i].check(player)
     }
+    for (let i = 0; i < clouds.length; i++) {
+      clouds[i].animate()
+    }
     if (sanity <= 0) {
       sentence = "Tu es devenue folle."
       gameOver(sentence)
+    }
+    if (player.sprite.x >= gameScene.width - 300) {
+      gameEnd()
     }
   }
   class UiBar {
@@ -291,8 +307,6 @@ export function game () {
       this.deco.y = this.y
       this.bar.x = this.x + 17
       this.bar.y = this.y + 1
-      this.deco.zIndex = 10
-
       this.deco.zIndex = 100
       game.stage.addChild(this.bar, this.deco)
     }
@@ -388,7 +402,6 @@ export function game () {
       this.up.press = (e) => {
         if (stamina > 0) {
           stamina += -50
-
           this.forceJump = -0.03 * this.body.mass
           MATTER.Body.applyForce(this.body, this.body.position, { x: 0, y: this.forceJump })
           this.jumped++
@@ -406,7 +419,7 @@ export function game () {
       }
 
       this.up.release = (e) => {
-        this.body.force.y = 0
+        this.forceJump = 0
       }
     }
 
@@ -421,10 +434,9 @@ export function game () {
         gameBg.pivot.x += this.force / 10
       }
 
-      if (this.sprite.x >= _width / 2) {
+      if (this.sprite.x >= _width / 2 && this.sprite.x < gameScene.width - _width / 2) {
         gameScene.pivot.x = this.body.position.x - _width / 2
         gameFg.pivot.x = this.body.position.x - _width / 2
-        console.log("bite")
       }
 
       if (this.sprite.y > _height + 300) {
@@ -458,7 +470,7 @@ export function game () {
       this.sprite.scale.set(scaleRatio)
       this.circle = new PIXI.Graphics()
       this.circle.beginFill(0x0C0C0C)
-      this.circle.drawCircle(this.sprite.x, this.sprite.y, 200)
+      this.circle.drawCircle(this.sprite.x, this.sprite.y, 250)
       this.circle.endFill()
       gameScene.addChild(this.circle, this.sprite)
       gameScene.mask = this.circle
@@ -467,25 +479,25 @@ export function game () {
 
     control () {
       this.left.press = e => {
-        this.vx = -7.5
+        this.vx = -15
       }
       this.left.release = e => {
         this.vx = 0
       }
       this.right.press = e => {
-        this.vx = 7.5
+        this.vx = 15
       }
       this.right.release = e => {
         this.vx = 0
       }
       this.up.press = e => {
-        this.vy = -7.5
+        this.vy = -15
       }
       this.up.release = e => {
         this.vy = 0
       }
       this.down.press = e => {
-        this.vy = 7.5
+        this.vy = 15
       }
       this.down.release = e => {
         this.vy = 0
@@ -495,12 +507,8 @@ export function game () {
     animate () {
       this.circle.position.x += this.vx
       this.circle.position.y += this.vy
-
       this.sprite.x += this.vx
       this.sprite.y += this.vy
-
-      // this.circle.position.x = this.sprite.x
-      // this.circle.position.y = this.sprite.y
     }
   }
   class Monstre {
@@ -572,13 +580,16 @@ export function game () {
       this.platInfo = platInfo
       this.xSpeed = 5
       this.vx = this.xSpeed
-      this.vy = 5
+      this.vy = 6
       this.gravity = 0
       this.initialX = this.x
       this.willFall = false
+      this.timer = platInfo.delay
     }
 
     display () {
+      console.log(this.timer)
+
       this.sprite.anchor.set(0.5)
       this.sprite.scale.set(scaleRatio)
       if (this.platInfo.falling) {
@@ -597,10 +608,9 @@ export function game () {
 
     animate () {
       if (this.platInfo.moveY) {
-        if (this.sprite.y < -300 || this.sprite.y > _height + 300) {
+        if (this.sprite.y < 0 || this.sprite.y > _height) {
           this.vy *= -1
         }
-
         MATTER.Body.translate(this.body, { x: 0, y: this.vy })
       }
 
@@ -633,8 +643,8 @@ export function game () {
         this.player.jumped = 0
         stamina = 100
         if (this.platInfo.moveX) {
-          // MATTER.Body.setVelocity(this.player.body, { x: this.vx, y: 0 })
           MATTER.Body.translate(this.bPlayer, { x: this.vx, y: 0 })
+          gameBg.pivot.x += this.vx / 10
           this.sPlayer.x = this.bPlayer.position.x
         }
         if (this.platInfo.falling) {

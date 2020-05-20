@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix")
 
 /*
  |--------------------------------------------------------------------------
@@ -12,43 +12,44 @@ const mix = require('laravel-mix');
  */
 
 mix
-  .copy('src/**/*.html', 'dist/')
-  .copyDirectory('src/assets', 'dist/assets')
-  .js('src/scripts/app.js', 'dist/scripts/')
-  .sass('src/styles/app.scss', 'dist/styles/')
+  .copy("src/**/*.html", "dist/")
+  .copyDirectory("src/assets", "dist/assets")
+  .js("src/scripts/app.js", "dist/scripts/")
+  .sass("src/styles/app.scss", "dist/styles/")
   .options({
+    processCssUrls: false,
     autoprefixer: {
       options: {
         browsers: [
-          'last 2 versions'
+          "last 2 versions"
         ],
         grid: true
       }
     }
   })
-  .setPublicPath('dist')
+  .setPublicPath("dist")
   .browserSync({
     proxy: false,
-    server: 'dist',
+    server: "dist",
     files: [
-      'dist/**/*'
+      "dist/**/*"
     ]
   })
   .webpackConfig({
     resolve: {
       modules: [
-        'src/scripts',
-        'node_modules'
+        "src/scripts",
+        "node_modules"
       ]
     }
-  });
+  })
 
 if (!mix.inProduction()) {
   mix
     .webpackConfig({
-      devtool: 'source-map'
+      devtool: "source-map"
     })
-    .sourceMaps();
+    .sourceMaps()
 }
 // Full API
 // mix.js(src, output);

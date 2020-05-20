@@ -20,6 +20,11 @@ button{
  display: block;
   
 }
+.container{
+  max-width: 1400px;
+  width: 90%;
+  margin: 0 auto;
+}
 #story, #control, #level, #pause, #gameOver, #gameEnd{
   display: none;
 }
@@ -65,7 +70,7 @@ button{
 
   }
   &--gameOver{
-    position: revert;
+    position: initial;
     margin-top: 20px;
     opacity: 0;
     animation: gameOver .6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -178,14 +183,13 @@ button{
 .level-list{
   width: 90%;
   margin: 0 auto;
-  margin-top: 36px;
   display: flex;
-  justify-content: space-around;
   &__el{
     width: 10%;
     border: 4px solid rgba($c__white--dark, 1.0);
     border-radius: 10px;
     padding: 10px;
+    margin: 36px;
     & p{
       margin: 0;
       text-align: center;

@@ -17,7 +17,6 @@ export function menu () {
   })
   const menu = {
     mainMenu: document.querySelector("#mainMenu"),
-    story: document.querySelector("#story"),
     control: document.querySelector("#control"),
     level: document.querySelector("#level")
   }
@@ -33,17 +32,15 @@ export function menu () {
   }
   for (let i = 0; i < navEl.length; i++) {
     navEl[i].addEventListener("click", (e) => {
-      const test = i
+      const currentEl = i
       e.target.parentNode.classList.add("nav__el--actif")
-      console.log(e.target)
-
       const name = e.target.getAttribute("data-name")
       for (let i = 0; i < Object.keys(menu).length; i++) {
         Object.values(menu)[i].style.display = "none"
         navEl[i].classList.remove("nav__el--actif")
       }
       menu[name].style.display = "block"
-      navEl[test].classList.add("nav__el--actif")
+      navEl[currentEl].classList.add("nav__el--actif")
     })
   }
   canvasStart.stage.addChild(bgCont)
