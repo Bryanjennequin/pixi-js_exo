@@ -5,7 +5,7 @@ import * as MATTER from "matter-js"
 import * as GSAP from "gsap"
 import { keyboard } from "../components/keyFunction"
 import { collideTest } from "../components/collideTest"
-import { platInfo, _height, _width, scaleRatio } from "./info"
+import { platInfo, _height, _width } from "./info"
 GSAP.gsap.ticker.fps(60)
 export function game () {
   let monsterInterval,
@@ -31,9 +31,11 @@ export function game () {
   const canvasGame = document.getElementById("canvasGame")
 
   const gameScene = new PIXI.Container()
-  const gameBg = new PIXI.Container()
+  const gameBgFirst = new PIXI.Container()
+  const gameBgSecond = new PIXI.Container()
+  const gameBgThird = new PIXI.Container()
   const gameFg = new PIXI.Container()
-
+  const BgPlan = [gameBgFirst, gameBgSecond, gameBgThird]
   const Engine = MATTER.Engine
   const World = MATTER.World
   const Bodies = MATTER.Bodies
@@ -48,10 +50,12 @@ export function game () {
 
   game.stage.sortableChildren = true
   gameScene.sortableChildren = true
-  gameBg.sortableChildren = true
   game.ticker.maxFPS = 60
   gameFg.zIndex = Infinity
-  game.stage.addChild(gameScene, gameBg, gameFg)
+  gameBgFirst.zIndex = -3
+  gameBgSecond.zIndex = -2
+  gameBgThird.zIndex = -1
+  game.stage.addChild(gameScene, gameBgFirst, gameBgSecond, gameBgThird, gameFg)
 
   function start () {
     const start = keyboard("Enter")
@@ -157,7 +161,7 @@ export function game () {
     Engine.clear(engine)
     gameScene.children = []
     gameFg.children = []
-    gameBg.children = []
+    gameBgFirst.children = []
     for (let i = 0; i < monstersObj.length; i++) {
       monstersObj[i].display = null
       monstersObj[i].animate = null
@@ -259,8 +263,8 @@ export function game () {
     // // bg.anchor.set(0, 1)
     // // bg.x = 0
     // // bg.y = _height + 300
-    gameBg.zIndex = -1
-    gameBg.addChild(sky)
+
+    gameBgFirst.addChild(sky)
     montagne = new Montagne(sprites.background)
     montagne.display()
     game.ticker.add(addTickersFunc)
@@ -381,7 +385,7 @@ export function game () {
           } else {
             this.sprite.y = _height
           }
-          gameBg.addChild(this.sprite)
+          BgPlan[y].addChild(this.sprite)
         }
       }
     }
@@ -404,8 +408,6 @@ export function game () {
     }
 
     display () {
-      console.log(this.sheet)
-
       this.sprite.textures = this.sheet.player2.animations.perso_stop
       this.sprite.animationSpeed = 0.05
       this.sprite.zIndex = 100
@@ -470,7 +472,9 @@ export function game () {
 
       if (this.right.isDown || this.left.isDown) {
         MATTER.Body.translate(this.body, { x: this.force, y: 0 })
-        gameBg.pivot.x += this.force / 10
+        gameBgFirst.pivot.x += this.force / 15
+        gameBgSecond.pivot.x += this.force / 5
+        gameBgThird.pivot.x += this.force / 2
       }
 
       if (this.sprite.x >= _width / 2 && this.sprite.x < gameScene.width - _width / 2) {
@@ -502,8 +506,6 @@ export function game () {
     }
 
     display () {
-      console.log(this.sprite)
-
       this.sprite.x = 200
       this.sprite.y = _height / 2
       this.sprite.animationSpeed = 0.167
@@ -516,34 +518,44 @@ export function game () {
       this.circle.drawCircle(this.sprite.x, this.sprite.y, 250)
       this.circle.endFill()
       gameScene.addChild(this.circle, this.sprite)
-      // gameScene.mask = this.circle
-      // gameBg.mask = this.circle
+      gameScene.mask = this.circle
+      gameBgFirst.mask = this.circle
+      gameBgSecond.mask = this.circle
+      gameBgThird.mask = this.circle
     }
 
     control () {
       this.left.press = e => {
         this.vx = -15
+        this.sprite.angle = 90
       }
       this.left.release = e => {
         this.vx = 0
+        this.sprite.angle = 0
       }
       this.right.press = e => {
         this.vx = 15
+        this.sprite.angle = -90
       }
       this.right.release = e => {
         this.vx = 0
+        this.sprite.angle = 0
       }
       this.up.press = e => {
         this.vy = -15
+        this.sprite.angle = 180
       }
       this.up.release = e => {
         this.vy = 0
+        this.sprite.angle = 0
       }
       this.down.press = e => {
         this.vy = 15
+        this.sprite.angle = 0
       }
       this.down.release = e => {
         this.vy = 0
+        this.sprite.angle = 0
       }
     }
 
@@ -567,8 +579,6 @@ export function game () {
     }
 
     display () {
-      console.log(this.sprite)
-
       if (this.random === this.x.length - 1) {
         this.sprite.x = this.x[this.random]
         this.sprite.y = this.y[Math.floor(Math.random() * 2)]
@@ -633,8 +643,6 @@ export function game () {
     }
 
     display () {
-      console.log(this.timer)
-
       this.sprite.anchor.set(0.5)
       this.sprite.scale.set(0.5)
       if (this.platInfo.falling) {
@@ -697,7 +705,9 @@ export function game () {
         }
         if (this.platInfo.moveX) {
           MATTER.Body.translate(this.bPlayer, { x: this.vx, y: 0 })
-          gameBg.pivot.x += this.vx / 10
+          gameBgThird.pivot.x += this.vx / 6
+          gameBgSecond.pivot.x += this.vx / 10
+          gameBgFirst.pivot.x += this.vx / 15
           this.sPlayer.x = this.bPlayer.position.x
         }
         if (this.platInfo.falling) {
@@ -751,7 +761,6 @@ export function game () {
     check (player) {
       this.colisionPlayer = collideTest(this.sprite, player.sprite)
       if (this.colisionPlayer) {
-        console.log("collide")
         if (player.jumped > 0) {
           if (player.left.isDown || player.right.isDown) {
             player.sprite.textures = player.sheet.player.animations.perso
