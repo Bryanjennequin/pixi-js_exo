@@ -88,9 +88,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>4096</int>
             <key>height</key>
-            <int>2048</int>
+            <int>4096</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -181,8 +181,12 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../Desktop/tfe_sprite/monstre/monstre_0.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/monstre/monstre_1.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_1.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_2.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_3.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_4.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_5.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_6.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -191,17 +195,21 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>21,20,42,40</rect>
+                <rect>175,182,350,365</rect>
                 <key>scale9Paddings</key>
-                <rect>21,20,42,40</rect>
+                <rect>175,182,350,365</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../../Desktop/tfe_sprite/monstre/monstre_0.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/monstre/monstre_1.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_1.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_2.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_3.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_4.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_5.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/monstre/monstre_6.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

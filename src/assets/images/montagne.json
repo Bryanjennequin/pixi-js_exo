@@ -1,0 +1,39 @@
+{"frames": {
+
+"montagne_1.png":
+{
+	"frame": {"x":0,"y":0,"w":2500,"h":1250},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2500,"h":1250},
+	"sourceSize": {"w":2500,"h":1250}
+},
+"montagne_2.png":
+{
+	"frame": {"x":0,"y":1250,"w":2500,"h":1250},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2500,"h":1250},
+	"sourceSize": {"w":2500,"h":1250}
+},
+"montagne_3.png":
+{
+	"frame": {"x":0,"y":2500,"w":2500,"h":1250},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2500,"h":1250},
+	"sourceSize": {"w":2500,"h":1250}
+}},
+"animations": {
+	"montagne": ["montagne_1.png","montagne_2.png","montagne_3.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "montagne.png",
+	"format": "RGBA8888",
+	"size": {"w":2500,"h":3750},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:19afb4ef174057080b5b37a304f171d1:76f4b03a4a91db5e906de4dacfc04e3b:66f3896e5f8220f384d5f00136645342$"
+}
+}

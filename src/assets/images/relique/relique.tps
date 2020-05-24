@@ -181,10 +181,11 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../Desktop/tfe_sprite/relique/relique_0.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/relique/relique_1.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/relique/relique_2.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/relique/relique_3.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_1.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_2.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_3.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_4.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_5.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -193,19 +194,20 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>17,10,33,20</rect>
+                <rect>100,196,200,391</rect>
                 <key>scale9Paddings</key>
-                <rect>17,10,33,20</rect>
+                <rect>100,196,200,391</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../../Desktop/tfe_sprite/relique/relique_0.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/relique/relique_1.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/relique/relique_2.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/relique/relique_3.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_1.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_2.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_3.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_4.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_5.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

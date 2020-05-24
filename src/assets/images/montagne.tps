@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>plateform_start.json</filename>
+                <filename>montagne.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,9 +181,9 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_1.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_2.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_3.png</key>
+            <key type="filename">montagne_1.png</key>
+            <key type="filename">montagne_2.png</key>
+            <key type="filename">montagne_3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -192,18 +192,18 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>640,181,1280,361</rect>
+                <rect>625,313,1250,625</rect>
                 <key>scale9Paddings</key>
-                <rect>640,181,1280,361</rect>
+                <rect>625,313,1250,625</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_1.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_2.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_3.png</filename>
+            <filename>montagne_1.png</filename>
+            <filename>montagne_2.png</filename>
+            <filename>montagne_3.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

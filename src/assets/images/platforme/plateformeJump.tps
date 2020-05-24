@@ -181,7 +181,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">plateform_longue.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_grande.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -190,13 +190,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>100,10,199,19</rect>
+                <rect>250,99,500,199</rect>
                 <key>scale9Paddings</key>
-                <rect>100,10,199,19</rect>
+                <rect>250,99,500,199</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">plateform_moyenne.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_moyenne.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -205,13 +205,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>50,10,99,19</rect>
+                <rect>131,54,262,109</rect>
                 <key>scale9Paddings</key>
-                <rect>50,10,99,19</rect>
+                <rect>131,54,262,109</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">plateform_pause.png</key>
+            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_petite.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -220,34 +220,18 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>271,400,541,800</rect>
+                <rect>77,57,153,115</rect>
                 <key>scale9Paddings</key>
-                <rect>271,400,541,800</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">plateform_petite.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>25,10,49,19</rect>
-                <key>scale9Paddings</key>
-                <rect>25,10,49,19</rect>
+                <rect>77,57,153,115</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>plateform_longue.png</filename>
-            <filename>plateform_moyenne.png</filename>
-            <filename>plateform_petite.png</filename>
-            <filename>plateform_pause.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_grande.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_moyenne.png</filename>
+            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_petite.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

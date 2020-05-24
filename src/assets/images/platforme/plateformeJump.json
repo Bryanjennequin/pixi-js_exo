@@ -1,0 +1,36 @@
+{"frames": {
+
+"plateforme_grande.png":
+{
+	"frame": {"x":0,"y":0,"w":1000,"h":397},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":397},
+	"sourceSize": {"w":1000,"h":397}
+},
+"plateforme_moyenne.png":
+{
+	"frame": {"x":0,"y":397,"w":524,"h":217},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":524,"h":217},
+	"sourceSize": {"w":524,"h":217}
+},
+"plateforme_petite.png":
+{
+	"frame": {"x":524,"y":397,"w":306,"h":229},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":306,"h":229},
+	"sourceSize": {"w":306,"h":229}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "plateformeJump.png",
+	"format": "RGBA8888",
+	"size": {"w":1000,"h":626},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:f35541532f20aa086dc462eafc666cce:c1d56b221262a76e0ea3d032a5b279ff:f03f3ad5d27e6183c5a55760234beb9d$"
+}
+}

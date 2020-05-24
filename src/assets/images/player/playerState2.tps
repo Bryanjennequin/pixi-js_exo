@@ -88,9 +88,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>4096</int>
+            <int>2048</int>
             <key>height</key>
-            <int>4096</int>
+            <int>2048</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>plateform_start.json</filename>
+                <filename>playerState2.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,9 +181,8 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_1.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_2.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_3.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_saut_1.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_saut_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -192,18 +191,35 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>640,181,1280,361</rect>
+                <rect>150,171,300,343</rect>
                 <key>scale9Paddings</key>
-                <rect>640,181,1280,361</rect>
+                <rect>150,171,300,343</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_stop_1.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_stop_2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>75,190,150,381</rect>
+                <key>scale9Paddings</key>
+                <rect>75,190,150,381</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_1.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_2.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/platforme/plateforme_start_3.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_saut_1.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_saut_2.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_stop_1.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_stop_2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

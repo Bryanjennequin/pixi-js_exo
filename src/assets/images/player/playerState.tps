@@ -181,14 +181,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_0.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_1.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_2.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_3.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_4.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_5.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_6.png</key>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/perso_anim_7.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -197,13 +190,17 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>15,22,29,44</rect>
+                <rect>150,190,300,380</rect>
                 <key>scale9Paddings</key>
-                <rect>15,22,29,44</rect>
+                <rect>150,190,300,380</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../Desktop/tfe_sprite/player/player_stop.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_2.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_3.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_4.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_5.png</key>
+            <key type="filename">../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_6.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -212,24 +209,21 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>9,22,19,44</rect>
+                <rect>150,190,300,381</rect>
                 <key>scale9Paddings</key>
-                <rect>9,22,19,44</rect>
+                <rect>150,190,300,381</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_0.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_1.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_2.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_3.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_4.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_5.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_6.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/perso_anim_7.png</filename>
-            <filename>../../../../../../Desktop/tfe_sprite/player/player_stop.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_1.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_2.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_3.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_4.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_5.png</filename>
+            <filename>../../../../../../Desktop/tfe_sprite/NOUVEAU SPRITE/perso_mouv/perso_6.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

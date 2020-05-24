@@ -1,47 +1,55 @@
 {"frames": {
 
-"relique_0.png":
+"allier_1.png":
 {
-	"frame": {"x":0,"y":0,"w":67,"h":40},
+	"frame": {"x":0,"y":0,"w":400,"h":783},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":67,"h":40},
-	"sourceSize": {"w":67,"h":40}
+	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
+	"sourceSize": {"w":400,"h":783}
 },
-"relique_1.png":
+"allier_2.png":
 {
-	"frame": {"x":67,"y":0,"w":67,"h":40},
+	"frame": {"x":400,"y":0,"w":400,"h":783},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":67,"h":40},
-	"sourceSize": {"w":67,"h":40}
+	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
+	"sourceSize": {"w":400,"h":783}
 },
-"relique_2.png":
+"allier_3.png":
 {
-	"frame": {"x":134,"y":0,"w":67,"h":40},
+	"frame": {"x":800,"y":0,"w":400,"h":783},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":67,"h":40},
-	"sourceSize": {"w":67,"h":40}
+	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
+	"sourceSize": {"w":400,"h":783}
 },
-"relique_3.png":
+"allier_4.png":
 {
-	"frame": {"x":201,"y":0,"w":67,"h":40},
+	"frame": {"x":1200,"y":0,"w":400,"h":783},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":67,"h":40},
-	"sourceSize": {"w":67,"h":40}
+	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
+	"sourceSize": {"w":400,"h":783}
+},
+"allier_5.png":
+{
+	"frame": {"x":1600,"y":0,"w":400,"h":783},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
+	"sourceSize": {"w":400,"h":783}
 }},
 "animations": {
-	"relique": ["relique_0.png","relique_1.png","relique_2.png","relique_3.png"]
+	"allier": ["allier_1.png","allier_2.png","allier_3.png","allier_4.png","allier_5.png"]
 },
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "relique.png",
 	"format": "RGBA8888",
-	"size": {"w":268,"h":40},
+	"size": {"w":2000,"h":783},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:62e36bbd8a0d1588632a50e63c604483:63f7bc52679d7b055f0d594723729f8d:1d165693499910417decafce2be5829a$"
+	"smartupdate": "$TexturePacker:SmartUpdate:3030b09e332cbeb2661ab6996170adf8:3acd0c1df8d3b01cb02fb58dee427e1d:1d165693499910417decafce2be5829a$"
 }
 }

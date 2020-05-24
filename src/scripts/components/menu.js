@@ -25,7 +25,7 @@ export function menu () {
     const li = document.createElement("li")
     li.classList.add("level-list__el")
     li.innerHTML = `
-    <img src="../assets/images/levelPicture/level_1.png">
+    <img src="assets/images/levelPicture/level_1.png">
     <p>Niveau ${i + 1}</p>
     `
     levelList.appendChild(li)

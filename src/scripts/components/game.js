@@ -18,7 +18,8 @@ export function game () {
     relique,
     sanity,
     stamina,
-    currentLevel
+    currentLevel,
+    montagne
 
   let started = false
   let paused = false
@@ -47,6 +48,7 @@ export function game () {
 
   game.stage.sortableChildren = true
   gameScene.sortableChildren = true
+  gameBg.sortableChildren = true
   game.ticker.maxFPS = 60
   gameFg.zIndex = Infinity
   game.stage.addChild(gameScene, gameBg, gameFg)
@@ -76,13 +78,16 @@ export function game () {
 
   function setup (level) {
     sprites = {
-      "player": PIXI.Loader.shared.resources["./assets/images/player/playerState.json"].spritesheet,
+      player: {
+        "player": PIXI.Loader.shared.resources["./assets/images/player/playerState.json"].spritesheet,
+        "player2": PIXI.Loader.shared.resources["./assets/images/player/playerState2.json"].spritesheet
+      },
       "plateformeJump": PIXI.Loader.shared.resources["./assets/images/platforme/plateformeJump.json"].spritesheet,
       "plateformeStart": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_start.json"].spritesheet,
       "plateformePause2": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_pause2.json"].spritesheet,
       "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
       "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
-      "background": PIXI.Loader.shared.resources["./assets/images/background.png"],
+      "background": PIXI.Loader.shared.resources["./assets/images/montagne.json"].spritesheet,
       "cloud": PIXI.Loader.shared.resources["./assets/images/cloud/cloud.json"].spritesheet,
       "ui": PIXI.Loader.shared.resources["./assets/images/UI/ui.json"].spritesheet
 
@@ -245,18 +250,19 @@ export function game () {
       clouds.push(cloud)
     }
     monsterInterval = setInterval(monsterFunc, 5000)
-    cloudInterval = setInterval(cloudFunc, 5000)
-    const bg = PIXI.Sprite.from("./assets/images/background.png")
+    // cloudInterval = setInterval(cloudFunc, 5000)
+    // const bg = PIXI.Sprite.from("./assets/images/background.png")
     const sky = new PIXI.Graphics()
     sky.beginFill(0x77B5FE)
     sky.drawRect(0, 0, gameScene.width, gameScene.height)
     sky.endFill()
-    bg.anchor.set(0, 1)
-    bg.x = 0
-    bg.y = _height + 300
+    // // bg.anchor.set(0, 1)
+    // // bg.x = 0
+    // // bg.y = _height + 300
     gameBg.zIndex = -1
-
-    gameBg.addChild(sky, bg)
+    gameBg.addChild(sky)
+    montagne = new Montagne(sprites.background)
+    montagne.display()
     game.ticker.add(addTickersFunc)
   }
   function addTickersFunc (e) {
@@ -276,9 +282,9 @@ export function game () {
       platObj[i].animate()
       platObj[i].check(player)
     }
-    for (let i = 0; i < clouds.length; i++) {
-      clouds[i].animate()
-    }
+    // for (let i = 0; i < clouds.length; i++) {
+    //   clouds[i].animate()
+    // }
     if (sanity <= 0) {
       sentence = "Tu es devenue folle."
       gameOver(sentence)
@@ -321,44 +327,69 @@ export function game () {
       }
     }
   }
-  class Cloud {
+  // class Cloud {
+  //   constructor (sheet) {
+  //     this.playerPos = gameScene.pivot.x
+  //     this.x = this.playerPos + _width
+  //     this.y = Math.random() * _height / 2
+  //     this.sheet = sheet
+  //     this.sprite = new PIXI.Sprite(this.sheet.textures["cloud_1.png"])
+  //     this.vx = Math.random() * 2 + 0.1
+  //   }
+
+  //   display () {
+  //     if (Math.random() > 0.5) {
+  //       this.sprite.texture = this.sheet.textures["cloud_2.png"]
+  //     }
+  //     if (Math.random() > 0.333) {
+  //       this.sprite.zIndex = -3
+  //     } else {
+  //       this.sprite.zIndex = 1000
+  //     }
+  //     this.sprite.scale.set(0.3)
+  //     this.sprite.x = this.x
+  //     this.sprite.y = this.y
+
+  //     gameScene.addChild(this.sprite)
+  //   }
+
+  //   animate () {
+  //     this.sprite.x += -this.vx
+  //     if (this.sprite.x < gameScene.pivot.x - this.sprite.width) {
+  //       gameScene.removeChild(this.sprite)
+  //     }
+  //   }
+  // }
+  class Montagne {
     constructor (sheet) {
-      this.playerPos = gameScene.pivot.x
-      this.x = this.playerPos + _width
-      this.y = Math.random() * _height / 2
       this.sheet = sheet
-      this.sprite = new PIXI.Sprite(this.sheet.textures["cloud_1.png"])
-      this.vx = Math.random() * 2 + 0.1
+      this.x = 0
+      this.y = 0
+      this.allSprite = []
     }
 
     display () {
-      if (Math.random() > 0.5) {
-        this.sprite.texture = this.sheet.textures["cloud_2.png"]
-      }
-      if (Math.random() > 0.333) {
-        this.sprite.zIndex = -3
-      } else {
-        this.sprite.zIndex = 1000
-      }
-      this.sprite.scale.set(0.3)
-      this.sprite.x = this.x
-      this.sprite.y = this.y
-
-      gameScene.addChild(this.sprite)
-    }
-
-    animate () {
-      this.sprite.x += -this.vx
-      if (this.sprite.x < gameScene.pivot.x - this.sprite.width) {
-        gameScene.removeChild(this.sprite)
+      for (let i = 0; i < 5; i++) {
+        for (let y = 0; y < 3; y++) {
+          this.sprite = new PIXI.Sprite(this.sheet.textures[`montagne_${3 - y}.png`])
+          this.sprite.scale.set(0.7)
+          this.sprite.anchor.set(0, 1)
+          this.sprite.x = this.sprite.width * i
+          this.allSprite.push(this.sprite)
+          if (_height > 700) {
+            this.sprite.y = _height + 100
+          } else {
+            this.sprite.y = _height
+          }
+          gameBg.addChild(this.sprite)
+        }
       }
     }
   }
-
   class Player {
     constructor (sheet) {
       this.sheet = sheet
-      this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.perso_anim)
+      this.sprite = new PIXI.AnimatedSprite(this.sheet.player.animations.perso)
       this.x = 200
       this.y = _height / 2 - this.sprite.height
       this.vx = 0
@@ -373,13 +404,15 @@ export function game () {
     }
 
     display () {
-      this.sprite.texture = this.sheet.textures["player_stop.png"]
-      this.sprite.animationSpeed = 0.167
+      console.log(this.sheet)
+
+      this.sprite.textures = this.sheet.player2.animations.perso_stop
+      this.sprite.animationSpeed = 0.05
       this.sprite.zIndex = 100
       this.sprite.anchor.set(0.5, 0.5)
-      this.sprite.scale.set(scaleRatio)
+      this.sprite.scale.set(0.3)
       this.body = Bodies.rectangle(this.x, this.y, this.sprite.width / 4, this.sprite.height)
-
+      this.sprite.play()
       MATTER.Body.setInertia(this.body, Infinity)
       World.add(engine.world, this.body)
       gameFg.addChild(this.sprite)
@@ -387,15 +420,18 @@ export function game () {
 
     control () {
       this.left.press = (e) => {
+        this.sprite.textures = this.sheet.player.animations.perso
+        this.sprite.animationSpeed = 0.27
         this.force = -10
-        this.sprite.scale.x = -scaleRatio
+        this.sprite.scale.x = -0.3
 
         this.sprite.play()
         // this.stageVx = -this.speed
       }
       this.right.press = (e) => {
-        this.sprite.scale.x = scaleRatio
-        this.sprite.animationSpeed = 0.167
+        this.sprite.textures = this.sheet.player.animations.perso
+        this.sprite.scale.x = 0.3
+        this.sprite.animationSpeed = 0.27
         this.sprite.play()
         this.force = 10
       }
@@ -405,17 +441,20 @@ export function game () {
           this.forceJump = -0.03 * this.body.mass
           MATTER.Body.applyForce(this.body, this.body.position, { x: 0, y: this.forceJump })
           this.jumped++
+          this.sprite.play()
         }
       }
       this.left.release = (e) => {
         this.force = 0
-        this.sprite.stop()
-        this.sprite.texture = this.sheet.textures["player_stop.png"]
+        this.sprite.textures = this.sheet.player2.animations.perso_stop
+        this.sprite.animationSpeed = 0.05
+        this.sprite.play()
       }
       this.right.release = (e) => {
         this.force = 0
-        this.sprite.stop()
-        this.sprite.texture = this.sheet.textures["player_stop.png"]
+        this.sprite.textures = this.sheet.player2.animations.perso_stop
+        this.sprite.animationSpeed = 0.05
+        this.sprite.play()
       }
 
       this.up.release = (e) => {
@@ -425,7 +464,7 @@ export function game () {
 
     animate () {
       if (this.right.isDown && this.left.isDown) {
-        this.sprite.texture = this.sheet.textures["player_stop.png"]
+        this.sprite.textures = this.sheet.player.animations.perso
         this.force = 0
       }
 
@@ -438,7 +477,9 @@ export function game () {
         gameScene.pivot.x = this.body.position.x - _width / 2
         gameFg.pivot.x = this.body.position.x - _width / 2
       }
-
+      if (this.jumped > 0) {
+        this.sprite.textures = this.sheet.player2.animations.perso_saut
+      }
       if (this.sprite.y > _height + 300) {
         sentence = "Tu es tombée dans l'oubli."
         gameOver(sentence)
@@ -450,7 +491,7 @@ export function game () {
   class Relique {
     constructor (sheet) {
       this.sheet = sheet
-      this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.relique)
+      this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.allier)
       this.left = keyboard("ArrowLeft")
       this.right = keyboard("ArrowRight")
       this.up = keyboard("ArrowUp")
@@ -461,20 +502,22 @@ export function game () {
     }
 
     display () {
+      console.log(this.sprite)
+
       this.sprite.x = 200
       this.sprite.y = _height / 2
       this.sprite.animationSpeed = 0.167
       this.sprite.zIndex = 101
       this.sprite.play()
       this.sprite.anchor.set(0.5)
-      this.sprite.scale.set(scaleRatio)
+      this.sprite.scale.set(0.15)
       this.circle = new PIXI.Graphics()
       this.circle.beginFill(0x0C0C0C)
       this.circle.drawCircle(this.sprite.x, this.sprite.y, 250)
       this.circle.endFill()
       gameScene.addChild(this.circle, this.sprite)
-      gameScene.mask = this.circle
-      gameBg.mask = this.circle
+      // gameScene.mask = this.circle
+      // gameBg.mask = this.circle
     }
 
     control () {
@@ -524,6 +567,8 @@ export function game () {
     }
 
     display () {
+      console.log(this.sprite)
+
       if (this.random === this.x.length - 1) {
         this.sprite.x = this.x[this.random]
         this.sprite.y = this.y[Math.floor(Math.random() * 2)]
@@ -533,7 +578,7 @@ export function game () {
       }
 
       this.sprite.anchor.set(0.5)
-      this.sprite.scale.set(scaleRatio - 0.4)
+      this.sprite.scale.set(0.2)
       this.sprite.animationSpeed = 0.167
       this.sprite.play()
       gameFg.addChild(this.sprite)
@@ -574,7 +619,7 @@ export function game () {
       this.bPlayer = this.player.body
       this.sPlayer = this.player.sprite
       this.sheet = sheet
-      this.sprite = new PIXI.Sprite(this.sheet.textures[`plateform_${platInfo.size}.png`])
+      this.sprite = new PIXI.Sprite(this.sheet.textures[`plateforme_${platInfo.size}.png`])
       this.x = platInfo.x
       this.y = platInfo.y
       this.platInfo = platInfo
@@ -591,7 +636,7 @@ export function game () {
       console.log(this.timer)
 
       this.sprite.anchor.set(0.5)
-      this.sprite.scale.set(scaleRatio)
+      this.sprite.scale.set(0.5)
       if (this.platInfo.falling) {
         this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, { isSleeping: true })
       } else {
@@ -640,8 +685,16 @@ export function game () {
     check () {
       this.colisionPlayer = collideTest(this.sprite, this.sPlayer)
       if (this.colisionPlayer) {
-        this.player.jumped = 0
-        stamina = 100
+        if (this.player.jumped > 0) {
+          if (this.player.left.isDown || this.player.right.isDown) {
+            this.player.sprite.textures = this.player.sheet.player.animations.perso
+          } else {
+            this.player.sprite.textures = this.player.sheet.player2.animations.perso_stop
+          }
+          this.player.jumped = 0
+          stamina = 100
+          this.player.sprite.play()
+        }
         if (this.platInfo.moveX) {
           MATTER.Body.translate(this.bPlayer, { x: this.vx, y: 0 })
           gameBg.pivot.x += this.vx / 10
@@ -670,21 +723,23 @@ export function game () {
     display () {
       if (this.platInfo.model === "start") {
         this.sheet = this.sheet.plateformeStart
-        this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.plateform_start)
-        this.sprite.animationSpeed = 0.167
-        this.sprite.play()
-      } else if (this.platInfo.model === "pause0") {
-        this.sheet = this.sheet.plateformeJump
-        this.sprite = new PIXI.Sprite(this.sheet.textures["plateform_pause.png"])
-      } else if (this.platInfo.model === "pause1") {
-        this.sheet = this.sheet.plateformePause2
-        this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.plateform_pause2_anim)
-        this.sprite.animationSpeed = 0.167
+        this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.plateforme_start)
+        this.sprite.width = _width - 200
+        this.sprite.height = this.sprite.width * (1250 / 2500)
+        this.sprite.animationSpeed = 0.157
         this.sprite.play()
       }
+      // } else if (this.platInfo.model === "pause0") {
+      //   this.sheet = this.sheet.plateformeJump
+      //   this.sprite = new PIXI.Sprite(this.sheet.textures["plateform_pause.png"])
+      // } else if (this.platInfo.model === "pause1") {
+      //   this.sheet = this.sheet.plateformePause2
+      //   this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.plateform_pause2_anim)
+      //   this.sprite.animationSpeed = 0.167
+      //   this.sprite.play()
+      // }
       this.sprite.anchor.set(0.5)
-      this.sprite.width = this.sprite.width / scaleRatio
-      this.sprite.height = this.sprite.height / scaleRatio
+
       this.sprite.x = this.x + this.sprite.width / 2
       this.sprite.y = this.y + this.sprite.height / 2
       this.body = Bodies.rectangle(this.sprite.x, this.sprite.y, this.sprite.width, this.sprite.height, this.option)
@@ -696,8 +751,17 @@ export function game () {
     check (player) {
       this.colisionPlayer = collideTest(this.sprite, player.sprite)
       if (this.colisionPlayer) {
-        player.jumped = 0
-        stamina = 100
+        console.log("collide")
+        if (player.jumped > 0) {
+          if (player.left.isDown || player.right.isDown) {
+            player.sprite.textures = player.sheet.player.animations.perso
+          } else {
+            player.sprite.textures = player.sheet.player2.animations.perso_stop
+          }
+          player.jumped = 0
+          player.sprite.play()
+          stamina = 100
+        }
       }
     }
   }
