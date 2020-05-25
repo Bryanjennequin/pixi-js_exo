@@ -257,14 +257,18 @@ export function game () {
     // cloudInterval = setInterval(cloudFunc, 5000)
     // const bg = PIXI.Sprite.from("./assets/images/background.png")
     const sky = new PIXI.Graphics()
-    sky.beginFill(0x77B5FE)
+    const filter = new PIXI.Graphics()
+    filter.beginFill(0x4F1342, 0.2)
+    filter.drawRect(0, 0, gameScene.width, gameScene.height)
+    filter.endFill()
+    sky.beginFill(0xD0F1F1, 1)
     sky.drawRect(0, 0, gameScene.width, gameScene.height)
     sky.endFill()
     // // bg.anchor.set(0, 1)
     // // bg.x = 0
     // // bg.y = _height + 300
-
     gameBgFirst.addChild(sky)
+    gameFg.addChild(filter)
     montagne = new Montagne(sprites.background)
     montagne.display()
     game.ticker.add(addTickersFunc)
@@ -518,10 +522,10 @@ export function game () {
       this.circle.drawCircle(this.sprite.x, this.sprite.y, 250)
       this.circle.endFill()
       gameScene.addChild(this.circle, this.sprite)
-      gameScene.mask = this.circle
-      gameBgFirst.mask = this.circle
-      gameBgSecond.mask = this.circle
-      gameBgThird.mask = this.circle
+      // gameScene.mask = this.circle
+      // gameBgFirst.mask = this.circle
+      // gameBgSecond.mask = this.circle
+      // gameBgThird.mask = this.circle
     }
 
     control () {
