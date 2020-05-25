@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Anton', sans-serif;
+  font-family: 'Inconsolata', monospace;
   color: $c__white--dark;
   font-size: 16px;
   background-color: $c__white--dark;
@@ -12,7 +12,7 @@ ul, li{
   list-style: none;
 }
 button{
-  font-family: 'Anton', sans-serif;
+  font-family: 'Inconsolata', monospace;
   background: transparent;
   border: none;
 }
@@ -40,8 +40,7 @@ button{
   z-index: 1;
   font-size: $size__big;
   text-align: center;
-  margin-top: 76px*2;
-  margin-bottom: 0;
+  margin: 0 0 72px 0;
   &::selection{
     background-color: transparent;
   }
@@ -51,10 +50,24 @@ button{
   }
   &--small{
     font-size: $size__mid;
-    margin-top: 76px;
+    margin-top: 72px;
   }
 }
+.mainMenu{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+.button{
+  position: relative;
+ & button{
+  color: $c__white--dark;
+  font-size: 1em;
+ }
 
+}
 .para{
   position: absolute;
   width: 100%;
@@ -208,7 +221,7 @@ button{
 .st0{fill:none;stroke:#F7F7F7;stroke-width:5;stroke-miterlimit:10;}
 // <!-- .st1{fill:#F7F7F7;} -->
 .st1{fill:#F7F7F7;stroke:#F7F7F7;stroke-miterlimit:10;}
-.st2{font-family: 'Anton', sans-serif;}
+.st2{font-family: 'Inconsolata', monospace;}
 .st3{font-size:50px;}
 @keyframes gameOver{
   0%{

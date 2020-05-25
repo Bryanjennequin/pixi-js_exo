@@ -248,29 +248,29 @@ export function game () {
       monstersObj.push(monstre)
     }
 
-    cloudFunc = function createCloud () {
-      const cloud = new Cloud(sprites.cloud)
-      cloud.display()
-      clouds.push(cloud)
-    }
     monsterInterval = setInterval(monsterFunc, 5000)
     // cloudInterval = setInterval(cloudFunc, 5000)
     // const bg = PIXI.Sprite.from("./assets/images/background.png")
     const sky = new PIXI.Graphics()
     const filter = new PIXI.Graphics()
-    filter.beginFill(0x4F1342, 0.2)
+    filter.beginFill(0x4F1342, 0.1)
     filter.drawRect(0, 0, gameScene.width, gameScene.height)
     filter.endFill()
-    sky.beginFill(0xD0F1F1, 1)
+    const filter2 = new PIXI.Graphics()
+    filter2.beginFill(0x4F1342, 0.05)
+    filter2.drawRect(0, 0, gameScene.width, gameScene.height)
+    filter2.endFill()
+    sky.beginFill(0xbde1f8, 1)
     sky.drawRect(0, 0, gameScene.width, gameScene.height)
     sky.endFill()
     // // bg.anchor.set(0, 1)
     // // bg.x = 0
     // // bg.y = _height + 300
     gameBgFirst.addChild(sky)
-    gameFg.addChild(filter)
     montagne = new Montagne(sprites.background)
     montagne.display()
+    gameFg.addChild(filter2)
+    gameBgThird.addChild(filter)
     game.ticker.add(addTickersFunc)
   }
   function addTickersFunc (e) {
@@ -335,39 +335,7 @@ export function game () {
       }
     }
   }
-  // class Cloud {
-  //   constructor (sheet) {
-  //     this.playerPos = gameScene.pivot.x
-  //     this.x = this.playerPos + _width
-  //     this.y = Math.random() * _height / 2
-  //     this.sheet = sheet
-  //     this.sprite = new PIXI.Sprite(this.sheet.textures["cloud_1.png"])
-  //     this.vx = Math.random() * 2 + 0.1
-  //   }
 
-  //   display () {
-  //     if (Math.random() > 0.5) {
-  //       this.sprite.texture = this.sheet.textures["cloud_2.png"]
-  //     }
-  //     if (Math.random() > 0.333) {
-  //       this.sprite.zIndex = -3
-  //     } else {
-  //       this.sprite.zIndex = 1000
-  //     }
-  //     this.sprite.scale.set(0.3)
-  //     this.sprite.x = this.x
-  //     this.sprite.y = this.y
-
-  //     gameScene.addChild(this.sprite)
-  //   }
-
-  //   animate () {
-  //     this.sprite.x += -this.vx
-  //     if (this.sprite.x < gameScene.pivot.x - this.sprite.width) {
-  //       gameScene.removeChild(this.sprite)
-  //     }
-  //   }
-  // }
   class Montagne {
     constructor (sheet) {
       this.sheet = sheet
@@ -447,7 +415,6 @@ export function game () {
           this.forceJump = -0.03 * this.body.mass
           MATTER.Body.applyForce(this.body, this.body.position, { x: 0, y: this.forceJump })
           this.jumped++
-          this.sprite.play()
         }
       }
       this.left.release = (e) => {
@@ -476,14 +443,14 @@ export function game () {
 
       if (this.right.isDown || this.left.isDown) {
         MATTER.Body.translate(this.body, { x: this.force, y: 0 })
-        gameBgFirst.pivot.x += this.force / 15
-        gameBgSecond.pivot.x += this.force / 5
-        gameBgThird.pivot.x += this.force / 2
       }
 
       if (this.sprite.x >= _width / 2 && this.sprite.x < gameScene.width - _width / 2) {
         gameScene.pivot.x = this.body.position.x - _width / 2
         gameFg.pivot.x = this.body.position.x - _width / 2
+        gameBgFirst.pivot.x = gameScene.pivot.x / 15
+        gameBgSecond.pivot.x = gameScene.pivot.x / 5
+        gameBgThird.pivot.x = gameScene.pivot.x / 2
       }
       if (this.jumped > 0) {
         this.sprite.textures = this.sheet.player2.animations.perso_saut
