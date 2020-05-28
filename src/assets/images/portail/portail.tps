@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>ui.json</filename>
+                <filename>portail.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,8 +181,8 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">stamina.png</key>
-            <key type="filename">vie.png</key>
+            <key type="filename">portail_close.png</key>
+            <key type="filename">portail_open.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -191,35 +191,17 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>181,38,361,75</rect>
+                <rect>102,150,205,300</rect>
                 <key>scale9Paddings</key>
-                <rect>181,38,361,75</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">staminaIcon.png</key>
-            <key type="filename">vieIcon.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>45,38,90,75</rect>
-                <key>scale9Paddings</key>
-                <rect>45,38,90,75</rect>
+                <rect>102,150,205,300</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>stamina.png</filename>
-            <filename>staminaIcon.png</filename>
-            <filename>vie.png</filename>
-            <filename>vieIcon.png</filename>
+            <filename>portail_open.png</filename>
+            <filename>portail_close.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

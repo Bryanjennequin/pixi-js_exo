@@ -1,0 +1,28 @@
+{"frames": {
+
+"portail_close.png":
+{
+	"frame": {"x":0,"y":0,"w":409,"h":600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":409,"h":600},
+	"sourceSize": {"w":409,"h":600}
+},
+"portail_open.png":
+{
+	"frame": {"x":0,"y":600,"w":409,"h":600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":409,"h":600},
+	"sourceSize": {"w":409,"h":600}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "portail.png",
+	"format": "RGBA8888",
+	"size": {"w":409,"h":1200},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b2f434a22504cc9780f7cd6e978a2e5a:7fce4c27c8c43c3bf4c797e81569277e:8eb67bfb380e7971c07f2784ad44809d$"
+}
+}

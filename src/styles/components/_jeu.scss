@@ -33,14 +33,30 @@ button{
   left: 0;
   top: 0;
   z-index: 0;
-}
 
+}
+.control{
+  justify-content: center;
+  height: 100%;
+  background-color: rgba($c__black--light,  .8);
+  position: relative;
+  z-index: 100;
+}
+.level{
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba($c__black--light,  .8);
+  position: relative;
+  z-index: 100;
+  height: 100%;
+}
 .title{
   position: relative;
   z-index: 1;
-  font-size: $size__big;
+  font-family: 'Anton', sans-serif;
+  font-size: $size__veryBig;
   text-align: center;
-  margin: 0 0 72px 0;
+  margin: 0 0 144px 0;
   &::selection{
     background-color: transparent;
   }
@@ -51,22 +67,40 @@ button{
   &--small{
     font-size: $size__mid;
     margin-top: 72px;
+    margin-bottom: 0;
   }
 }
 .mainMenu{
+
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin: auto;
   height: 100%;
 }
 .button{
   position: relative;
- & button{
   color: $c__white--dark;
-  font-size: 1em;
- }
-
+  font-size: $size__small;
+  border: 5px solid $c__white--dark;
+  border-bottom: none;
+  border-top: none;
+  border-radius: 50px;
+  animation: buttonAnim .6s cubic-bezier(0.45, 0, 0.55, 1) alternate infinite;
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  &:hover{
+      
+    cursor: pointer;
+  }
+}
+@keyframes buttonAnim{
+  0%{
+    padding: 20px 90px;
+  }
+  100%{
+    padding: 20px 100px;
+  }
 }
 .para{
   position: absolute;
@@ -94,18 +128,19 @@ button{
 .nav{
   font-size: 1em;
   position: absolute;
-  top: 18px;
-  right: 36px;
+  bottom: 36px;
+  left: 36px;
   display: flex;
   justify-content: center;
-  z-index: 1;
+  flex-direction: column;
+  z-index: 10000;
 
   &__el{
-    margin-left: 36px;
+    margin-bottom: 54px;
     position: relative;
     & button{
 
-      font-size: 1em;
+      font-size: $size__small;
       color: $c__white--dark;
       &:before{
         content: "";
@@ -164,15 +199,22 @@ button{
   top: 0;
   left: 0;
   background-color: $c__black--light;
+
   &--pause{
     background-color: rgba($c__black--light,  .8);
     
+  }
+  &--gameOver, &--gameEnd{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }
 .control-touch{
   position: absolute;
   display: flex;
-  width: 60%;
+  width: 50%;
   left: 0;
   right: 0;
   margin: 0 auto;

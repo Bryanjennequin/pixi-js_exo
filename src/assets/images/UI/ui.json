@@ -1,36 +1,44 @@
 {"frames": {
 
-"decoBar.png":
+"stamina.png":
 {
-	"frame": {"x":0,"y":0,"w":195,"h":100},
+	"frame": {"x":0,"y":0,"w":723,"h":150},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":100},
-	"sourceSize": {"w":195,"h":100}
+	"spriteSourceSize": {"x":0,"y":0,"w":723,"h":150},
+	"sourceSize": {"w":723,"h":150}
 },
-"sanityBar.png":
+"staminaIcon.png":
 {
-	"frame": {"x":195,"y":0,"w":875,"h":100},
+	"frame": {"x":723,"y":0,"w":180,"h":150},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":875,"h":100},
-	"sourceSize": {"w":875,"h":100}
+	"spriteSourceSize": {"x":0,"y":0,"w":180,"h":150},
+	"sourceSize": {"w":180,"h":150}
 },
-"staminaBar.png":
+"vie.png":
 {
-	"frame": {"x":1070,"y":0,"w":875,"h":100},
+	"frame": {"x":903,"y":0,"w":723,"h":150},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":875,"h":100},
-	"sourceSize": {"w":875,"h":100}
+	"spriteSourceSize": {"x":0,"y":0,"w":723,"h":150},
+	"sourceSize": {"w":723,"h":150}
+},
+"vieIcon.png":
+{
+	"frame": {"x":1626,"y":0,"w":180,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":180,"h":150},
+	"sourceSize": {"w":180,"h":150}
 }},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "ui.png",
 	"format": "RGBA8888",
-	"size": {"w":1945,"h":100},
+	"size": {"w":1806,"h":150},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:cff6534d31268f6aab88d62c22130fe4:373c6df9663c5aeb07063b87f6a282e4:5b04aa198265472a3c5f56958d78e97b$"
+	"smartupdate": "$TexturePacker:SmartUpdate:6cf1b409f236fa7f232bcd2fe2564ed3:5ee0aa49ae5ebc58e672207a99b6323c:5b04aa198265472a3c5f56958d78e97b$"
 }
 }

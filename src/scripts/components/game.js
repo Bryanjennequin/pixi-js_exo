@@ -55,13 +55,19 @@ export function game () {
   gameBgFirst.zIndex = -3
   gameBgSecond.zIndex = -2
   gameBgThird.zIndex = -1
-  game.stage.addChild(gameScene, gameBgFirst, gameBgSecond, gameBgThird, gameFg)
+  gameScene.addChild(gameBgFirst, gameBgSecond, gameBgThird)
+  game.stage.addChild(gameScene, gameFg)
 
   function start () {
     const start = keyboard("Enter")
     const menu = document.getElementById("menu")
     const levelListEl = document.querySelectorAll(".level-list__el")
-
+    const startButton = document.querySelector("#startButton")
+    startButton.addEventListener("click", e => {
+      menu.style.display = "none"
+      setup(0)
+      started = true
+    })
     start.press = e => {
       if (started === false) {
         menu.style.display = "none"
@@ -88,13 +94,11 @@ export function game () {
       },
       "plateformeJump": PIXI.Loader.shared.resources["./assets/images/platforme/plateformeJump.json"].spritesheet,
       "plateformeStart": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_start.json"].spritesheet,
-      "plateformePause2": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_pause2.json"].spritesheet,
       "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
       "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
       "background": PIXI.Loader.shared.resources["./assets/images/montagne.json"].spritesheet,
-      "cloud": PIXI.Loader.shared.resources["./assets/images/cloud/cloud.json"].spritesheet,
-      "ui": PIXI.Loader.shared.resources["./assets/images/UI/ui.json"].spritesheet
-
+      "ui": PIXI.Loader.shared.resources["./assets/images/UI/ui.json"].spritesheet,
+      "portail": PIXI.Loader.shared.resources["./assets/images/portail/portail.json"].spritesheet
     }
     currentLevel = level
     setLevel(sprites, currentLevel)
@@ -132,8 +136,8 @@ export function game () {
   function gameOver (dieMethod) {
     const gameOver = document.querySelector("#gameOver")
     const deathSentence = document.querySelector("#deathSentence")
-    const restart = keyboard("r")
-    gameOver.style.display = "block"
+    const restart = keyboard("Enter")
+    gameOver.style.display = "flex"
     restart.press = (e) => {
       document.location.reload(false)
     }
@@ -144,7 +148,7 @@ export function game () {
 
   function gameEnd () {
     const gameEnds = document.querySelector("#gameEnd")
-    gameEnds.style.display = "block"
+    gameEnds.style.display = "flex"
     reset()
     const restart = keyboard("Enter")
     restart.press = (e) => {
@@ -152,9 +156,9 @@ export function game () {
     }
   }
   function reset () {
+    game.ticker.remove(addTickersFunc)
     clearInterval(monsterInterval)
     clearInterval(cloudInterval)
-    game.ticker.remove(addTickersFunc)
     gameScene.pivot.x = 0
     gameFg.pivot.x = 0
     World.clear(engine.world)
@@ -208,7 +212,7 @@ export function game () {
     platSpeObj = []
     monstersObj = []
   }
-  const type = ["sanity", "stamina"]
+  const type = ["vie", "stamina"]
   const huds = []
   function setLevel (sprites, level) {
     sanity = 100
@@ -229,7 +233,7 @@ export function game () {
     /// ////////
 
     for (let i = 0; i < platInfo[level].classique.length; i++) {
-      const plateform = new Plateform(sprites.plateformeJump, platInfo[level].classique[i], player)
+      const plateform = new Plateform(sprites.plateformeJump, platInfo[level].classique, player, i)
       plateform.display()
       plateform.check()
       platObj.push(plateform)
@@ -244,13 +248,10 @@ export function game () {
     monsterFunc = function createMonster () {
       const monstre = new Monstre(sprites.monstre, player, relique)
       monstre.display()
-      monstre.animate()
       monstersObj.push(monstre)
     }
 
     monsterInterval = setInterval(monsterFunc, 5000)
-    // cloudInterval = setInterval(cloudFunc, 5000)
-    // const bg = PIXI.Sprite.from("./assets/images/background.png")
     const sky = new PIXI.Graphics()
     const filter = new PIXI.Graphics()
     filter.beginFill(0x4F1342, 0.1)
@@ -263,9 +264,6 @@ export function game () {
     sky.beginFill(0xbde1f8, 1)
     sky.drawRect(0, 0, gameScene.width, gameScene.height)
     sky.endFill()
-    // // bg.anchor.set(0, 1)
-    // // bg.x = 0
-    // // bg.y = _height + 300
     gameBgFirst.addChild(sky)
     montagne = new Montagne(sprites.background)
     montagne.display()
@@ -281,6 +279,7 @@ export function game () {
       huds[i].animate()
     }
     for (let i = 0; i < monstersObj.length; i++) {
+      monstersObj[i].animate()
       monstersObj[i].check()
     }
     for (let i = 0; i < platSpeObj.length; i++) {
@@ -297,30 +296,30 @@ export function game () {
       sentence = "Tu es devenue folle."
       gameOver(sentence)
     }
-    if (player.sprite.x >= gameScene.width - 300) {
-      gameEnd()
-    }
   }
+
   class UiBar {
     constructor (sprite, type, i) {
       this.sheet = sprite
       this.type = type
-
-      this.deco = new PIXI.Sprite(this.sheet.textures["decoBar.png"])
-      this.bar = new PIXI.Sprite(this.sheet.textures[`${this.type}Bar.png`])
+      this.deco = new PIXI.Sprite(this.sheet.textures[`${this.type}Icon.png`])
+      this.bar = new PIXI.Sprite(this.sheet.textures[`${this.type}.png`])
       this.x = 100
       this.y = 50 + 50 * i
     }
 
     display () {
       // this.bar.anchor.set(0.5)
-      this.bar.scale.set(0.1)
-      this.deco.scale.set(0.3)
+      this.bar.scale.set(0.2)
       this.deco.anchor.set(0.5)
       this.deco.x = this.x
       this.deco.y = this.y
-      this.bar.x = this.x + 17
-      this.bar.y = this.y + 1
+      this.deco.width = 30
+      this.deco.height = this.deco.width / 1.2
+      this.bar.width = 100
+      this.bar.height = 30
+      this.bar.x = this.x + 20
+      this.bar.y = this.y - this.deco.height / 2
       this.deco.zIndex = 100
       game.stage.addChild(this.bar, this.deco)
     }
@@ -345,7 +344,7 @@ export function game () {
     }
 
     display () {
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 10; i++) {
         for (let y = 0; y < 3; y++) {
           this.sprite = new PIXI.Sprite(this.sheet.textures[`montagne_${3 - y}.png`])
           this.sprite.scale.set(0.7)
@@ -367,7 +366,7 @@ export function game () {
       this.sheet = sheet
       this.sprite = new PIXI.AnimatedSprite(this.sheet.player.animations.perso)
       this.x = 200
-      this.y = _height / 2 - this.sprite.height
+      this.y = _height / 2
       this.vx = 0
       this.vy = 0
       this.speed = 7.5
@@ -375,7 +374,6 @@ export function game () {
       this.left = keyboard("q")
       this.right = keyboard("d")
       this.up = keyboard(" ")
-      this.down = keyboard("s")
       this.jumped = 0
     }
 
@@ -449,8 +447,8 @@ export function game () {
         gameScene.pivot.x = this.body.position.x - _width / 2
         gameFg.pivot.x = this.body.position.x - _width / 2
         gameBgFirst.pivot.x = gameScene.pivot.x / 15
-        gameBgSecond.pivot.x = gameScene.pivot.x / 5
-        gameBgThird.pivot.x = gameScene.pivot.x / 2
+        gameBgSecond.pivot.x = gameScene.pivot.x / 10
+        gameBgThird.pivot.x = gameScene.pivot.x / 5
       }
       if (this.jumped > 0) {
         this.sprite.textures = this.sheet.player2.animations.perso_saut
@@ -477,7 +475,7 @@ export function game () {
     }
 
     display () {
-      this.sprite.x = 200
+      this.sprite.x = 300
       this.sprite.y = _height / 2
       this.sprite.animationSpeed = 0.167
       this.sprite.zIndex = 101
@@ -485,14 +483,15 @@ export function game () {
       this.sprite.anchor.set(0.5)
       this.sprite.scale.set(0.15)
       this.circle = new PIXI.Graphics()
-      this.circle.beginFill(0x0C0C0C)
+      this.circle.beginFill(0xFF0000)
       this.circle.drawCircle(this.sprite.x, this.sprite.y, 250)
       this.circle.endFill()
-      gameScene.addChild(this.circle, this.sprite)
-      // gameScene.mask = this.circle
-      // gameBgFirst.mask = this.circle
-      // gameBgSecond.mask = this.circle
-      // gameBgThird.mask = this.circle
+      this.circle.filters = [new PIXI.filters.BlurFilter(10)]
+      const bounds = new PIXI.Rectangle(0, 0, _width, _height)
+      this.texture = game.renderer.generateTexture(this.circle, PIXI.SCALE_MODES.NEAREST, window.devicePixelRatio, bounds)
+      this.focus = new PIXI.Sprite(this.texture)
+      gameScene.addChild(this.focus, this.sprite)
+      // gameScene.mask = this.focus
     }
 
     control () {
@@ -531,8 +530,8 @@ export function game () {
     }
 
     animate () {
-      this.circle.position.x += this.vx
-      this.circle.position.y += this.vy
+      this.focus.position.x += this.vx
+      this.focus.position.y += this.vy
       this.sprite.x += this.vx
       this.sprite.y += this.vy
     }
@@ -566,7 +565,7 @@ export function game () {
     }
 
     animate () {
-      this.birdAnim = GSAP.gsap.to(this.sprite, { x: this.player.sprite.x, y: this.player.sprite.y, duration: 3, ease: "Power1.easeOut" })
+      this.birdAnim = GSAP.gsap.to(this.sprite, { x: this.player.sprite.x, y: this.player.sprite.y, duration: 3, ease: " Power2.easeIn" })
       allAnim.push(this.birdAnim)
     }
 
@@ -587,22 +586,19 @@ export function game () {
           this.sprite.visible = false
           gameFg.removeChild(this.sprite)
         }
-        if (this.sprite.x < gameScene.pivot.x) {
-          this.sprite.visible = false
-          gameFg.removeChild(this.sprite)
-        }
       }
     }
   }
   class Plateform {
-    constructor (sheet, platInfo, player) {
+    constructor (sheet, platInfo, player, i) {
+      this.currenPlat = i
       this.player = player
       this.bPlayer = this.player.body
       this.sPlayer = this.player.sprite
       this.sheet = sheet
-      this.sprite = new PIXI.Sprite(this.sheet.textures[`plateforme_${platInfo.size}.png`])
-      this.x = platInfo.x
-      this.y = platInfo.y
+      this.sprite = new PIXI.Sprite(this.sheet.textures[`plateforme_${platInfo[this.currenPlat].size}.png`])
+      this.x = platInfo[this.currenPlat].x
+      this.y = platInfo[this.currenPlat].y
       this.platInfo = platInfo
       this.xSpeed = 5
       this.vx = this.xSpeed
@@ -610,18 +606,30 @@ export function game () {
       this.gravity = 0
       this.initialX = this.x
       this.willFall = false
-      this.timer = platInfo.delay
+      this.timer = platInfo[this.currenPlat].delay
     }
 
     display () {
       this.sprite.anchor.set(0.5)
       this.sprite.scale.set(0.5)
-      if (this.platInfo.falling) {
+      // if (this.currenPlat === 0) {
+      //   if (this.platInfo[this.currenPlat].falling) {
+      //     this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, { isSleeping: true })
+      //   } else {
+      //     this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, { isStatic: true })
+      //   }
+      // } else {
+      //   if (this.platInfo[this.currenPlat].falling) {
+      //     this.body = Bodies.rectangle(this.x + this.platInfo[this.currenPlat - 1].x, this.y, this.sprite.width, this.sprite.height, { isSleeping: true })
+      //   } else {
+      //     this.body = Bodies.rectangle(this.x + this.platInfo[this.currenPlat - 1].x, this.y, this.sprite.width, this.sprite.height, { isStatic: true })
+      //   }
+      // }
+      if (this.platInfo[this.currenPlat].falling) {
         this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, { isSleeping: true })
       } else {
         this.body = Bodies.rectangle(this.x, this.y, this.sprite.width, this.sprite.height, { isStatic: true })
       }
-
       this.body.friction = 0
       this.body.frictionStatic = 0
       this.sprite.x = this.body.position.x
@@ -703,13 +711,13 @@ export function game () {
 
     display () {
       if (this.platInfo.model === "start") {
-        this.sheet = this.sheet.plateformeStart
-        this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.plateforme_start)
+        this.sprite = new PIXI.AnimatedSprite(this.sheet.plateformeStart.animations.plateforme_start)
         this.sprite.width = _width - 200
         this.sprite.height = this.sprite.width * (1250 / 2500)
         this.sprite.animationSpeed = 0.157
         this.sprite.play()
       }
+
       // } else if (this.platInfo.model === "pause0") {
       //   this.sheet = this.sheet.plateformeJump
       //   this.sprite = new PIXI.Sprite(this.sheet.textures["plateform_pause.png"])
@@ -720,17 +728,35 @@ export function game () {
       //   this.sprite.play()
       // }
       this.sprite.anchor.set(0.5)
-
       this.sprite.x = this.x + this.sprite.width / 2
       this.sprite.y = this.y + this.sprite.height / 2
       this.body = Bodies.rectangle(this.sprite.x, this.sprite.y, this.sprite.width, this.sprite.height, this.option)
-
+      if (this.platInfo.portail.isHere) {
+        this.action = keyboard("e")
+        this.spritePortail = new PIXI.Sprite(this.sheet.portail.textures[`portail_${this.platInfo.portail.state}.png`])
+        this.spritePortail.anchor.set(0.5, 1)
+        this.spritePortail.scale.set(0.6)
+        this.spritePortail.y = _height / 2
+        if (this.platInfo.portail.model === "start") {
+          this.spritePortail.x = this.spritePortail.width / 2
+          gameScene.addChild(this.spritePortail)
+        } else {
+          this.spritePortail.x = this.sprite.width - this.spritePortail.width / 2
+          gameScene.addChild(this.spritePortail)
+        }
+      }
       World.add(engine.world, this.body)
       gameScene.addChild(this.sprite)
     }
 
     check (player) {
       this.colisionPlayer = collideTest(this.sprite, player.sprite)
+      this.colisionPlayerPortail = collideTest(this.spritePortail, player.sprite)
+      this.action.press = e => {
+        if (this.colisionPlayerPortail && this.platInfo.portail.state === "open") {
+          gameEnd()
+        }
+      }
       if (this.colisionPlayer) {
         if (player.jumped > 0) {
           if (player.left.isDown || player.right.isDown) {
@@ -745,4 +771,8 @@ export function game () {
       }
     }
   }
+  window.addEventListener("resize", e => {
+    game.renderer.resize(window.innerWidth, window.innerHeight)
+    console.log("bjkfsq")
+  })
 }

@@ -21,23 +21,23 @@
 <meta property="twitter:description" content="Blind Rush est un jeu de plateforme un peu particulier ou le héro est aveugle, et dois donc se fier à la vision de la relique magique qui l'accompagne">
 <meta property="twitter:image" content="https://www.bryanjennequin.be/projets/tfe/beta/assets/images/meta.png">
 <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"> 
 <link rel="stylesheet" type="text/css" href="styles/app.css">
 </head>
 <body>
   <section id="menu" class="menu">
+    <canvas id="canvasStart"></canvas>
     <nav>
       <ul class="nav">
-        <li class="nav__el nav__el--actif"><button data-name="mainMenu">Menu principal</button></li>
+        <li class="nav__el" ><button data-name="jouer" id="startButton" > Commencer l'aventure</button></li>
+        <li class="nav__el nav__el--actif"><button data-name="mainMenu">Écran titre</button></li>
         <li class="nav__el" ><button data-name="control">Contrôle</button></li>
         <li class="nav__el" ><button data-name="level">Niveaux</button></li>
       </ul>
     </nav>
     <div id="mainMenu" class="mainMenu">
-      <canvas id="canvasStart"></canvas>
       <h1 class="title">Blind Rush</h1>
-      <div class="button">
-        <button>Appuie sur entrée pour commencer</button>
-      </div>
+      
     </div>
     <div id="story" class="story">
       <h2 class="title title--small">Histoire</h2>
@@ -67,11 +67,11 @@
             <g id="repère">
             </g>
             <text transform="matrix(1 0 0 1 121.2681 76.5171)" class="st1 st2 st3">Q</text>
-            <text transform="matrix(1 0 0 1 235.1217 76.517)" class="st1 st2 st3">S</text>
+            <text transform="matrix(1 0 0 1 235.1217 76.517)" class="st1 st2 st3">E</text>
             <text transform="matrix(1 0 0 1 348.39 76.5172)" class="st1 st2 st3">D</text>
             </svg>
           </div>
-          <p>Utilise Q et D pour te déplacer à gauche et à droite, utilise la barre espace pour sauter, la touche S te permet d'intéragir avec certains objets</p>
+          <p>Utilise Q et D pour te déplacer à gauche et à droite, utilise la barre espace pour sauter, la touche E te permet d'intéragir avec certains objets</p>
         </div>
         <div class="control-touch__el">
           <div class="control-touch__svg">
@@ -134,11 +134,11 @@
             <g >
             </g>
             <text transform="matrix(1 0 0 1 121.2681 76.5171)" class="st1 st2 st3">Q</text>
-            <text transform="matrix(1 0 0 1 235.1217 76.517)" class="st1 st2 st3">S</text>
+            <text transform="matrix(1 0 0 1 235.1217 76.517)" class="st1 st2 st3">E</text>
             <text transform="matrix(1 0 0 1 348.39 76.5172)" class="st1 st2 st3">D</text>
             </svg>
           </div>
-          <p>Utilise Q et D pour te déplacer à gauche et à droite, utilise la barre espace pour sauter, la touche S te permet d'intéragir avec certains objets</p>
+          <p>Utilise Q et D pour te déplacer à gauche et à droite, utilise la barre espace pour sauter, la touche E te permet d'intéragir avec certains objets</p>
         </div>
         <div class="control-touch__el">
           <div class="control-touch__svg">
@@ -168,12 +168,12 @@
         </div>
       </div>
   </section>
-  <section id="gameOver" class="menu">
-    <h2 class="title title--gameOver">Game Over</h2>
+  <section id="gameOver" class="menu  menu--gameOver">
+    <h2 class="title">Game Over</h2>
     <p id="deathSentence" class="para">Tu es tombé(e) dans l'oubli.</p>
     <p class="para">Appuye sur R pour recommencer</p>
   </section>
-  <section id="gameEnd" class="menu">
+  <section id="gameEnd" class="menu menu--gameEnd">
     <h2 class="title title--gameOver">Bravo tu as terminé ce niveau!</h2>
     <p class="para"> Pour l'instant, tu as terminé tous les niveaux disponibles, appuye sur entrée pour revenir au menu principal</p>
 

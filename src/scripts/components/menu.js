@@ -10,6 +10,7 @@ export function menu () {
   const filter = new PIXI.Graphics()
   bgCont.sortableChildren = true
   const canvasStart = new PIXI.Application({
+    autoResize: true,
     view: document.getElementById("canvasStart"),
     width: _width,
     height: _height,
@@ -33,12 +34,12 @@ export function menu () {
   }
   for (let i = 0; i < navEl.length; i++) {
     navEl[i].addEventListener("click", (e) => {
+      navEl[i].classList.remove("nav__el--actif")
       const currentEl = i
       e.target.parentNode.classList.add("nav__el--actif")
       const name = e.target.getAttribute("data-name")
       for (let i = 0; i < Object.keys(menu).length; i++) {
         Object.values(menu)[i].style.display = "none"
-        navEl[i].classList.remove("nav__el--actif")
       }
       menu[name].style.display = "flex"
       navEl[currentEl].classList.add("nav__el--actif")
@@ -55,6 +56,10 @@ export function menu () {
   sky.endFill()
 
   bgCont.addChild(sky, filter)
+  const menuBg = PIXI.Loader.shared.resources["./assets/images/Menu/menu.json"].spritesheet
+  const SpriteMenu = new PIXI.AnimatedSprite(menuBg.animations.bgMenu)
+  bgCont.addChild(SpriteMenu)
+  SpriteMenu.play()
   class Montagne {
     constructor () {
       this.sheet = PIXI.Loader.shared.resources["./assets/images/montagne.json"].spritesheet
@@ -83,4 +88,8 @@ export function menu () {
   }
   const montagne = new Montagne()
   montagne.display()
+  window.addEventListener("resize", e => {
+    canvasStart.renderer.resize(window.innerWidth, window.innerHeight)
+    console.log("bjkfsq")
+  })
 }
