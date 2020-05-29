@@ -1,9 +1,7 @@
 "use strict"
 import * as PIXI from "pixi.js"
-import * as GSAP from "gsap"
 import { platInfo, _width, _height } from "./info"
 export function menu () {
-  const navMenu = document.querySelector(".nav")
   const navEl = document.querySelectorAll(".nav__el")
   const bgCont = new PIXI.Container()
   const sky = new PIXI.Graphics()
@@ -18,6 +16,7 @@ export function menu () {
 
   })
   const menu = {
+    canvasGame: document.querySelector("#canvasGame"),
     mainMenu: document.querySelector("#mainMenu"),
     control: document.querySelector("#control"),
     level: document.querySelector("#level")
@@ -34,16 +33,27 @@ export function menu () {
   }
   for (let i = 0; i < navEl.length; i++) {
     navEl[i].addEventListener("click", (e) => {
-      navEl[i].classList.remove("nav__el--actif")
       const currentEl = i
       e.target.parentNode.classList.add("nav__el--actif")
       const name = e.target.getAttribute("data-name")
-      for (let i = 0; i < Object.keys(menu).length; i++) {
+      for (let i = 0; i < Object.values(menu).length; i++) {
         Object.values(menu)[i].style.display = "none"
+        navEl[i].classList.remove("nav__el--actif")
       }
       menu[name].style.display = "flex"
       navEl[currentEl].classList.add("nav__el--actif")
+      if (name === "canvasGame") {
+        destroy()
+      }
     })
+  }
+  function destroy () {
+    canvasStart.destroy()
+    montagne.display = null
+    montagne = null
+    monstre.display = null
+    monstre.animate = null
+    monstre = null
   }
   canvasStart.stage.addChild(bgCont)
 
@@ -58,8 +68,7 @@ export function menu () {
   bgCont.addChild(sky, filter)
   const menuBg = PIXI.Loader.shared.resources["./assets/images/Menu/menu.json"].spritesheet
   const SpriteMenu = new PIXI.AnimatedSprite(menuBg.animations.bgMenu)
-  bgCont.addChild(SpriteMenu)
-  SpriteMenu.play()
+
   class Montagne {
     constructor () {
       this.sheet = PIXI.Loader.shared.resources["./assets/images/montagne.json"].spritesheet
@@ -86,8 +95,46 @@ export function menu () {
       }
     }
   }
-  const montagne = new Montagne()
+  class Monstre {
+    constructor () {
+      this.sheet = PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet
+      this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.monstre)
+      this.x = _width + 100
+      this.y = (Math.random() * (_height - 100)) + 100
+    }
+
+    display () {
+      this.sprite.x = this.x
+      this.sprite.y = this.y
+      this.sprite.anchor.set(0.5)
+      this.sprite.scale.set(0.2)
+      this.sprite.animationSpeed = 0.167
+      this.sprite.play()
+      bgCont.addChild(this.sprite)
+    }
+
+    animate () {
+      canvasStart.ticker.add(e => {
+        console.log(this.sprite.x)
+        this.sprite.x += -5
+        if (this.sprite.x < 0) {
+          this.sprite.y = (Math.random() * (_height - 250)) + 250
+          this.sprite.x = this.x
+        }
+      })
+    }
+  }
+  let montagne = new Montagne()
   montagne.display()
+  bgCont.addChild(SpriteMenu)
+  SpriteMenu.anchor.set(0.5)
+  SpriteMenu.x = (_width / 2) + (SpriteMenu.width / 2) - 80
+  SpriteMenu.y = _height / 2
+  SpriteMenu.animationSpeed = 0.160
+  SpriteMenu.play()
+  let monstre = new Monstre()
+  monstre.display()
+  monstre.animate()
   window.addEventListener("resize", e => {
     canvasStart.renderer.resize(window.innerWidth, window.innerHeight)
     console.log("bjkfsq")
