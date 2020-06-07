@@ -2,73 +2,6 @@
 import * as PIXI from "pixi.js"
 import { platInfo, _width, _height } from "./info"
 export function menu () {
-  const navEl = document.querySelectorAll(".nav__el")
-  const bgCont = new PIXI.Container()
-  const sky = new PIXI.Graphics()
-  const filter = new PIXI.Graphics()
-  bgCont.sortableChildren = true
-  const canvasStart = new PIXI.Application({
-    autoResize: true,
-    view: document.getElementById("canvasStart"),
-    width: _width,
-    height: _height,
-    backgroundColor: 0x0a0a0a
-
-  })
-  const menu = {
-    canvasGame: document.querySelector("#canvasGame"),
-    mainMenu: document.querySelector("#mainMenu"),
-    control: document.querySelector("#control"),
-    level: document.querySelector("#level")
-  }
-  const levelList = document.querySelector(".level-list")
-  for (let i = 0; i < platInfo.length; i++) {
-    const li = document.createElement("li")
-    li.classList.add("level-list__el")
-    li.innerHTML = `
-    <img src="assets/images/levelPicture/level_1.png">
-    <p>Niveau ${i + 1}</p>
-    `
-    levelList.appendChild(li)
-  }
-  for (let i = 0; i < navEl.length; i++) {
-    navEl[i].addEventListener("click", (e) => {
-      const currentEl = i
-      e.target.parentNode.classList.add("nav__el--actif")
-      const name = e.target.getAttribute("data-name")
-      for (let i = 0; i < Object.values(menu).length; i++) {
-        Object.values(menu)[i].style.display = "none"
-        navEl[i].classList.remove("nav__el--actif")
-      }
-      menu[name].style.display = "flex"
-      navEl[currentEl].classList.add("nav__el--actif")
-      if (name === "canvasGame") {
-        destroy()
-      }
-    })
-  }
-  function destroy () {
-    canvasStart.destroy()
-    montagne.display = null
-    montagne = null
-    monstre.display = null
-    monstre.animate = null
-    monstre = null
-  }
-  canvasStart.stage.addChild(bgCont)
-
-  filter.beginFill(0x4F1342, 0.2)
-  filter.drawRect(0, 0, _width, _height)
-  filter.endFill()
-  filter.zIndex = 10
-  sky.beginFill(0xbde1f8, 1)
-  sky.drawRect(0, 0, _width, _height)
-  sky.endFill()
-
-  bgCont.addChild(sky, filter)
-  const menuBg = PIXI.Loader.shared.resources["./assets/images/Menu/menu.json"].spritesheet
-  const SpriteMenu = new PIXI.AnimatedSprite(menuBg.animations.bgMenu)
-
   class Montagne {
     constructor () {
       this.sheet = PIXI.Loader.shared.resources["./assets/images/montagne.json"].spritesheet
@@ -115,15 +48,83 @@ export function menu () {
 
     animate () {
       canvasStart.ticker.add(e => {
-        console.log(this.sprite.x)
         this.sprite.x += -5
-        if (this.sprite.x < 0) {
+        if (this.sprite.x < -(this.sprite.width)) {
           this.sprite.y = (Math.random() * (_height - 250)) + 250
           this.sprite.x = this.x
         }
       })
     }
   }
+  const navEl = document.querySelectorAll(".nav__el button")
+  const bgCont = new PIXI.Container()
+  const sky = new PIXI.Graphics()
+  const filter = new PIXI.Graphics()
+  bgCont.sortableChildren = true
+  const canvasStart = new PIXI.Application({
+    autoResize: true,
+    view: document.getElementById("canvasStart"),
+    width: _width,
+    height: _height,
+    backgroundColor: 0x0a0a0a
+
+  })
+  const menu = {
+    canvasGame: document.querySelector("#canvasGame"),
+    mainMenu: document.querySelector("#mainMenu"),
+    control: document.querySelector("#control"),
+    level: document.querySelector("#level")
+  }
+  const levelList = document.querySelector(".level-list")
+  for (let i = 0; i < platInfo.length; i++) {
+    const li = document.createElement("li")
+    li.classList.add("level-list__el")
+    li.innerHTML = `
+    <button>Niveau ${i + 1}</button>
+    `
+    li.addEventListener("click", e => {
+      destroy()
+    })
+    levelList.appendChild(li)
+  }
+  for (let i = 0; i < navEl.length; i++) {
+    navEl[i].addEventListener("click", (e) => {
+      const currentEl = i
+      e.target.parentNode.classList.add("nav__el--actif")
+      const name = e.target.getAttribute("data-name")
+      for (let i = 0; i < Object.values(menu).length; i++) {
+        Object.values(menu)[i].style.display = "none"
+        navEl[i].parentNode.classList.remove("nav__el--actif")
+      }
+      menu[name].style.display = "flex"
+      navEl[currentEl].parentNode.classList.add("nav__el--actif")
+      if (name === "canvasGame") {
+        destroy()
+      }
+    })
+  }
+  function destroy () {
+    canvasStart.destroy()
+    montagne.display = null
+    montagne = null
+    monstre.display = null
+    monstre.animate = null
+    monstre = null
+  }
+  canvasStart.stage.addChild(bgCont)
+
+  filter.beginFill(0x4F1342, 0.2)
+  filter.drawRect(0, 0, _width, _height)
+  filter.endFill()
+  filter.zIndex = 10
+  sky.beginFill(0xbde1f8, 1)
+  sky.drawRect(0, 0, _width, _height)
+  sky.endFill()
+
+  bgCont.addChild(sky, filter)
+  const menuBg = PIXI.Loader.shared.resources["./assets/images/Menu/menu.json"].spritesheet
+  const SpriteMenu = new PIXI.AnimatedSprite(menuBg.animations.bgMenu)
+
   let montagne = new Montagne()
   montagne.display()
   bgCont.addChild(SpriteMenu)
@@ -137,6 +138,5 @@ export function menu () {
   monstre.animate()
   window.addEventListener("resize", e => {
     canvasStart.renderer.resize(window.innerWidth, window.innerHeight)
-    console.log("bjkfsq")
   })
 }

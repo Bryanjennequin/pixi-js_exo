@@ -5,6 +5,8 @@ body {
   color: $c__white--dark;
   font-size: 16px;
   background-color: $c__white--dark;
+  line-height: 2;
+  overflow: hidden;
 }
 ul, li{
   padding: 0;
@@ -41,6 +43,8 @@ button{
   background-color: rgba($c__black--light,  .8);
   position: relative;
   z-index: 100;
+  flex-direction: column;
+  align-items: center;
 }
 .level{
   align-items: center;
@@ -61,6 +65,7 @@ button{
     background-color: transparent;
   }
   &--gameOver{
+    margin: 0;
     opacity: 0;
     animation: gameOver .6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
@@ -68,6 +73,11 @@ button{
     font-size: $size__mid;
     margin-top: 72px;
     margin-bottom: 0;
+  }
+  &--control{
+    font-size: $size__small;
+    margin-bottom: 9px;
+    margin-top: 0;
   }
 }
 .mainMenu{
@@ -144,7 +154,7 @@ button{
       color: $c__white--dark;
       &:before{
         content: "";
-        background: url("/assets/images/indicator.svg");
+        background: url("../assets/images/indicator.svg");
         position: absolute;
         top: 0;
         bottom: 0;
@@ -167,7 +177,7 @@ button{
       & button{
         &:before{
           content: "";
-          background: url("/assets/images/indicator.svg");
+          background: url("../assets/images/indicator.svg");
           position: absolute;
           top: 0;
           bottom: 0;
@@ -212,20 +222,17 @@ button{
   }
 }
 .control-touch{
-  position: absolute;
+
   display: flex;
   width: 50%;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  top: 0;
-  bottom: 0;
+  margin: auto 0;
   align-items: center;
   justify-content: space-between;
 
   &__el{
     width: 300px;
     text-align: center;
+    height: 100%;
   }
   &__svg{
     margin: 0 auto;
@@ -236,28 +243,22 @@ button{
   }
 }
 .level-list{
-  width: 90%;
+  width: 50%;
   margin: 0 auto;
   display: flex;
+  align-items: center;
+  flex-direction: column;
   &__el{
-    width: 10%;
-    border: 4px solid rgba($c__white--dark, 1.0);
-    border-radius: 10px;
-    padding: 10px;
-    margin: 36px;
-    & p{
-      margin: 0;
-      text-align: center;
-      width: 100%;
-      height: 100%;
-      padding: 10px 0;
+    margin-bottom: 18px;
+    & button{
+      font-size: $size__small;
+      color: $c__white--dark;
+      &:hover{
+        cursor: pointer;
+      }
     }
-    &:hover{
-      cursor: pointer;
-    }
-    & img{
-      width: 100%;
-    }
+
+
   }
 }
 .st0{fill:none;stroke:#F7F7F7;stroke-width:5;stroke-miterlimit:10;}

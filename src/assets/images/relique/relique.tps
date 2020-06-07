@@ -181,11 +181,25 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_1.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_2.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_3.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_4.png</key>
-            <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_5.png</key>
+            <key type="filename">allier_1.png</key>
+            <key type="filename">allier_2.png</key>
+            <key type="filename">allier_5.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>50,98,100,196</rect>
+                <key>scale9Paddings</key>
+                <rect>50,98,100,196</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">allier_3.png</key>
+            <key type="filename">allier_4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -203,11 +217,11 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_1.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_2.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_3.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_4.png</filename>
-            <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/relique/allier_5.png</filename>
+            <filename>allier_1.png</filename>
+            <filename>allier_2.png</filename>
+            <filename>allier_3.png</filename>
+            <filename>allier_4.png</filename>
+            <filename>allier_5.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -1,8 +1,40 @@
 {"frames": {
 
+"part_center.png":
+{
+	"frame": {"x":0,"y":0,"w":234,"h":181},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":234,"h":181},
+	"sourceSize": {"w":234,"h":181}
+},
+"part_left.png":
+{
+	"frame": {"x":234,"y":0,"w":202,"h":191},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":202,"h":191},
+	"sourceSize": {"w":202,"h":191}
+},
+"part_leftCenter.png":
+{
+	"frame": {"x":436,"y":0,"w":197,"h":148},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":197,"h":148},
+	"sourceSize": {"w":197,"h":148}
+},
+"plateforme_fall.png":
+{
+	"frame": {"x":0,"y":191,"w":1000,"h":183},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":183},
+	"sourceSize": {"w":1000,"h":183}
+},
 "plateforme_grande.png":
 {
-	"frame": {"x":0,"y":0,"w":1000,"h":397},
+	"frame": {"x":0,"y":374,"w":1000,"h":397},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":397},
@@ -10,7 +42,7 @@
 },
 "plateforme_moyenne.png":
 {
-	"frame": {"x":0,"y":397,"w":524,"h":217},
+	"frame": {"x":0,"y":771,"w":524,"h":217},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":524,"h":217},
@@ -18,7 +50,7 @@
 },
 "plateforme_petite.png":
 {
-	"frame": {"x":524,"y":397,"w":306,"h":229},
+	"frame": {"x":524,"y":771,"w":306,"h":229},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":306,"h":229},
@@ -29,8 +61,8 @@
 	"version": "1.0",
 	"image": "plateformeJump.png",
 	"format": "RGBA8888",
-	"size": {"w":1000,"h":626},
+	"size": {"w":1000,"h":1000},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:f35541532f20aa086dc462eafc666cce:c1d56b221262a76e0ea3d032a5b279ff:f03f3ad5d27e6183c5a55760234beb9d$"
+	"smartupdate": "$TexturePacker:SmartUpdate:23296f3a0a761539905db1ead21c788e:705ea6112d51b06bab1656a4805fa5fd:f03f3ad5d27e6183c5a55760234beb9d$"
 }
 }

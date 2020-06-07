@@ -181,6 +181,66 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">part_center.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>59,45,117,91</rect>
+                <key>scale9Paddings</key>
+                <rect>59,45,117,91</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">part_left.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>51,48,101,95</rect>
+                <key>scale9Paddings</key>
+                <rect>51,48,101,95</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">part_leftCenter.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>49,37,99,74</rect>
+                <key>scale9Paddings</key>
+                <rect>49,37,99,74</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">plateforme_fall.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>250,46,500,91</rect>
+                <key>scale9Paddings</key>
+                <rect>250,46,500,91</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_grande.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -232,6 +292,10 @@
             <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_grande.png</filename>
             <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_moyenne.png</filename>
             <filename>../../../../../../../../Volumes/Samsung_T5/tfe_sprite/NOUVEAU SPRITE/plateforme/plateforme_petite.png</filename>
+            <filename>part_center.png</filename>
+            <filename>part_left.png</filename>
+            <filename>part_leftCenter.png</filename>
+            <filename>plateforme_fall.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

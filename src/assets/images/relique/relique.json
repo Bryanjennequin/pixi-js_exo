@@ -2,43 +2,43 @@
 
 "allier_1.png":
 {
-	"frame": {"x":0,"y":0,"w":400,"h":783},
+	"frame": {"x":0,"y":0,"w":200,"h":392},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
-	"sourceSize": {"w":400,"h":783}
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":392},
+	"sourceSize": {"w":200,"h":392}
 },
 "allier_2.png":
 {
-	"frame": {"x":400,"y":0,"w":400,"h":783},
+	"frame": {"x":0,"y":392,"w":200,"h":392},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
-	"sourceSize": {"w":400,"h":783}
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":392},
+	"sourceSize": {"w":200,"h":392}
 },
 "allier_3.png":
 {
-	"frame": {"x":800,"y":0,"w":400,"h":783},
+	"frame": {"x":0,"y":784,"w":200,"h":392},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
-	"sourceSize": {"w":400,"h":783}
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":392},
+	"sourceSize": {"w":200,"h":392}
 },
 "allier_4.png":
 {
-	"frame": {"x":1200,"y":0,"w":400,"h":783},
+	"frame": {"x":0,"y":1176,"w":200,"h":392},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
-	"sourceSize": {"w":400,"h":783}
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":392},
+	"sourceSize": {"w":200,"h":392}
 },
 "allier_5.png":
 {
-	"frame": {"x":1600,"y":0,"w":400,"h":783},
+	"frame": {"x":0,"y":1568,"w":200,"h":392},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":783},
-	"sourceSize": {"w":400,"h":783}
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":392},
+	"sourceSize": {"w":200,"h":392}
 }},
 "animations": {
 	"allier": ["allier_1.png","allier_2.png","allier_3.png","allier_4.png","allier_5.png"]
@@ -48,8 +48,8 @@
 	"version": "1.0",
 	"image": "relique.png",
 	"format": "RGBA8888",
-	"size": {"w":2000,"h":783},
+	"size": {"w":200,"h":1960},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:3030b09e332cbeb2661ab6996170adf8:3acd0c1df8d3b01cb02fb58dee427e1d:1d165693499910417decafce2be5829a$"
+	"smartupdate": "$TexturePacker:SmartUpdate:8476ee491d343f008e73a5f4cf9cefdf:3e7e1c60354ca6bce4acfe377195cd94:1d165693499910417decafce2be5829a$"
 }
 }
