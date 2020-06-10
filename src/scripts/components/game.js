@@ -163,8 +163,8 @@ export function game () {
     gameOver.style.display = "flex"
     deathSentence.innerHTML = dieMethod
     deathSentence.classList.add("para--gameOver")
-    reset()
     restart.press = (e) => {
+      reset()
       gameOver.style.display = "none"
       setLevel(sprites, currentLevel)
     }
