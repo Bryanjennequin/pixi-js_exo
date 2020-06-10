@@ -1,0 +1,47 @@
+{"frames": {
+
+"plateforme_pause1_1.png":
+{
+	"frame": {"x":0,"y":0,"w":2560,"h":720},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2560,"h":720},
+	"sourceSize": {"w":2560,"h":720}
+},
+"plateforme_pause1_2.png":
+{
+	"frame": {"x":0,"y":720,"w":2560,"h":720},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2560,"h":720},
+	"sourceSize": {"w":2560,"h":720}
+},
+"plateforme_pause1_3.png":
+{
+	"frame": {"x":0,"y":1440,"w":2560,"h":720},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2560,"h":720},
+	"sourceSize": {"w":2560,"h":720}
+},
+"plateforme_pause2.png":
+{
+	"frame": {"x":0,"y":2160,"w":2560,"h":720},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2560,"h":720},
+	"sourceSize": {"w":2560,"h":720}
+}},
+"animations": {
+	"plateforme_pause1": ["plateforme_pause1_1.png","plateforme_pause1_2.png","plateforme_pause1_3.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "plateform_pause.png",
+	"format": "RGBA8888",
+	"size": {"w":2560,"h":2880},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:5c957acbc2e51245edb6789f41e108c1:d3fedab95783e5e4a6d23577533d7f3f:97b1888bf7059f34e8d7ef1bdbcdf96a$"
+}
+}

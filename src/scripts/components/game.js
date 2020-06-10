@@ -1,11 +1,15 @@
 /* eslint-disable quote-props */
 "use strict"
+
 import * as PIXI from "pixi.js"
+import sound from "pixi-sound"
 import * as MATTER from "matter-js"
 import * as GSAP from "gsap"
 import { keyboard } from "../components/keyFunction"
 import { collideTest } from "../components/collideTest"
 import { platInfo, _height, _width } from "./info"
+PIXI.utils.skipHello()
+
 GSAP.gsap.ticker.fps(60)
 export function game () {
   let monsterInterval,
@@ -19,7 +23,9 @@ export function game () {
     sanity,
     stamina,
     currentLevel,
-    montagne
+    montagne,
+    divPause,
+    divMute
 
   let timer = 0
   let started = false
@@ -30,7 +36,6 @@ export function game () {
   let platSpeObj = []
   let allAnim = []
   const canvasGame = document.getElementById("canvasGame")
-
   const gameScene = new PIXI.Container()
   const gameBgFirst = new PIXI.Container()
   const gameBgSecond = new PIXI.Container()
@@ -48,7 +53,15 @@ export function game () {
     backgroundColor: 0x0C0C0C
 
   })
+  const type = ["vie", "stamina"]
+  const huds = []
 
+  const localStorage = window.localStorage
+  if (localStorage.getItem("currentLevel") === null) {
+    localStorage.setItem("currentLevel", JSON.stringify(0))
+  }
+
+  currentLevel = JSON.parse(localStorage.getItem("currentLevel"))
   game.stage.sortableChildren = true
   gameScene.sortableChildren = true
   game.ticker.maxFPS = 60
@@ -56,7 +69,6 @@ export function game () {
   gameBgFirst.zIndex = -3
   gameBgSecond.zIndex = -2
   gameBgThird.zIndex = -1
-  gameScene.addChild(gameBgFirst, gameBgSecond, gameBgThird)
   game.stage.addChild(gameScene, gameFg)
 
   function start () {
@@ -68,14 +80,14 @@ export function game () {
     startButton.addEventListener("click", e => {
       menu.style.display = "none"
       canvasGame.style.display = "flex"
-      setup(0)
+      setup(currentLevel)
       started = true
     })
     start.press = e => {
       if (started === false) {
         menu.style.display = "none"
         canvasGame.style.display = "flex"
-        setup(0)
+        setup(currentLevel)
         started = true
       }
     }
@@ -84,6 +96,7 @@ export function game () {
         menu.style.display = "none"
         canvasGame.style.display = "flex"
         setup(i)
+        localStorage.setItem("currentLevel", JSON.stringify(i))
         started = true
       })
     }
@@ -99,6 +112,7 @@ export function game () {
       },
       "plateformeJump": PIXI.Loader.shared.resources["./assets/images/platforme/plateformeJump.json"].spritesheet,
       "plateformeStart": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_start.json"].spritesheet,
+      "plateformePause": PIXI.Loader.shared.resources["./assets/images/platforme/plateform_pause.json"].spritesheet,
       "monstre": PIXI.Loader.shared.resources["./assets/images/monstre/monstreState.json"].spritesheet,
       "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
       "background": PIXI.Loader.shared.resources["./assets/images/montagne.json"].spritesheet,
@@ -106,61 +120,80 @@ export function game () {
       "portail": PIXI.Loader.shared.resources["./assets/images/portail/portail.json"].spritesheet
     }
     currentLevel = level
+    ui(sprites)
     setLevel(sprites, currentLevel)
   }
-  const pauseScreen = document.querySelector("#pause")
-  const pause = keyboard("p")
+  function pauseGame () {
+    if (started === true) {
+
+    }
+    const pauseScreen = document.querySelector("#pause")
+    const pause = keyboard("p")
+
+    pause.press = e => {
+      if (paused === false && started === true) {
+        pauseScreen.style.display = "flex"
+        game.ticker.stop()
+        divPause.classList.toggle("gameui-pause--paused")
+        clearInterval(monsterInterval)
+        clearInterval(cloudInterval)
+        for (let i = 0; i < allAnim.length; i++) {
+          allAnim[i].pause()
+        }
+        sound.togglePauseAll()
+        paused = true
+      } else if (paused === true && started === true) {
+        pauseScreen.style.display = "none"
+        divPause.classList.toggle("gameui-pause--paused")
+        game.ticker.start()
+        monsterInterval = setInterval(monsterFunc, 5000)
+        cloudInterval = setInterval(cloudFunc, 5000)
+        for (let i = 0; i < allAnim.length; i++) {
+          allAnim[i].play()
+        }
+        sound.togglePauseAll()
+        paused = false
+      }
+    }
+  }
   const restart = keyboard("Enter")
-
-  restart.press = e => {
-    if (paused === true) {
-      pauseScreen.style.display = "none"
-      game.ticker.start()
-      monsterInterval = setInterval(monsterFunc, 5000)
-      cloudInterval = setInterval(cloudFunc, 5000)
-      for (let i = 0; i < allAnim.length; i++) {
-        allAnim[i].play()
-      }
-      paused = false
-    }
-  }
-
-  pause.press = e => {
-    if (paused === false) {
-      pauseScreen.style.display = "flex"
-      game.ticker.stop()
-      clearInterval(monsterInterval)
-      clearInterval(cloudInterval)
-      for (let i = 0; i < allAnim.length; i++) {
-        allAnim[i].pause()
-      }
-      paused = true
-    }
-  }
-
   function gameOver (dieMethod) {
     const gameOver = document.querySelector("#gameOver")
     const deathSentence = document.querySelector("#deathSentence")
-    const restart = keyboard("Enter")
     gameOver.style.display = "flex"
-    restart.press = (e) => {
-      document.location.reload(false)
-    }
     deathSentence.innerHTML = dieMethod
     deathSentence.classList.add("para--gameOver")
     reset()
+    restart.press = (e) => {
+      gameOver.style.display = "none"
+      setLevel(sprites, currentLevel)
+    }
   }
-
   function gameEnd () {
+    const paraEnd = document.querySelector("#paraEnd")
     const gameEnds = document.querySelector("#gameEnd")
     gameEnds.style.display = "flex"
-    reset()
-    const restart = keyboard("Enter")
-    restart.press = (e) => {
-      document.location.reload(false)
+    localStorage.setItem("currentLevel", JSON.stringify(currentLevel))
+
+    if (currentLevel < platInfo.length) {
+      paraEnd.innerHTML = "Appuye sur entrée pour passé au niveau suivant."
+      restart.press = (e) => {
+        reset()
+        gameEnds.style.display = "none"
+        setLevel(sprites, currentLevel)
+      }
+    } else {
+      paraEnd.innerHTML = "Tu as terminer tout les niveaux disponible, appuye sur entrée pour revenir au menu principal. "
+      restart.press = (e) => {
+        reset()
+        localStorage.clear()
+        document.location.reload()
+      }
     }
   }
   function reset () {
+    restart.press = null
+    sound.removeAll()
     game.ticker.remove(addTickersFunc)
     clearInterval(monsterInterval)
     clearInterval(cloudInterval)
@@ -171,6 +204,8 @@ export function game () {
     gameScene.children = []
     gameFg.children = []
     gameBgFirst.children = []
+    gameBgSecond.children = []
+    gameBgThird.children = []
     for (let i = 0; i < monstersObj.length; i++) {
       monstersObj[i].display = null
       monstersObj[i].animate = null
@@ -178,6 +213,7 @@ export function game () {
       monstersObj[i] = null
     }
     for (let i = 0; i < platSpeObj.length; i++) {
+      platSpeObj[i].action.press = null
       platSpeObj[i].display = null
       platSpeObj[i].check = null
       platSpeObj[i] = null
@@ -217,17 +253,46 @@ export function game () {
     platSpeObj = []
     monstersObj = []
   }
-  const type = ["vie", "stamina"]
-  const huds = []
-  function setLevel (sprites, level) {
-    sanity = 100
-    stamina = 100
-
+  function ui (sprites) {
+    divPause = document.createElement("div")
+    divPause.classList.add("gameui")
+    divPause.classList.add("gameui-pause")
+    divMute = document.createElement("div")
+    divMute.classList.add("gameui")
+    divMute.classList.add("gameui-mute")
+    document.body.appendChild(divMute)
+    document.body.appendChild(divPause)
     for (let i = 0; i < type.length; i++) {
       const hud = new UiBar(sprites.ui, type[i], i)
       hud.display()
       huds.push(hud)
     }
+  }
+  pauseGame()
+  const mute = keyboard("m")
+  mute.press = e => {
+    sound.toggleMuteAll()
+    divMute.classList.toggle("gameui-mute--muted")
+  }
+  function setLevel (sprites, level) {
+    const wind = sound.add("wind", {
+      url: "assets/sound/Wind.mp3",
+      loop: true,
+      volume: 0.05
+
+    })
+    const music = sound.add("music", {
+      url: "assets/sound/Zander Noriega - Perpetual Tension.mp3",
+      loop: true,
+      volume: 0.01
+
+    })
+    wind.play()
+    music.play()
+    gameScene.addChild(gameBgFirst, gameBgSecond, gameBgThird)
+    sanity = 100
+    stamina = 100
+
     player = new Player(sprites.player)
     player.display()
     player.control()
@@ -253,21 +318,22 @@ export function game () {
     monsterFunc = function createMonster () {
       const monstre = new Monstre(sprites.monstre, player, relique)
       monstre.display()
+
       monstersObj.push(monstre)
     }
 
-    monsterInterval = setInterval(monsterFunc, 5000)
+    monsterInterval = setInterval(monsterFunc, 3000)
     const sky = new PIXI.Graphics()
     const filter = new PIXI.Graphics()
     filter.beginFill(0x4F1342, 0.1)
-    filter.drawRect(0, 0, gameScene.width * 5, gameScene.height)
+    filter.drawRect(0, 0, gameScene.width * 20, gameScene.height)
     filter.endFill()
     const filter2 = new PIXI.Graphics()
     filter2.beginFill(0x4F1342, 0.05)
-    filter2.drawRect(0, 0, gameScene.width * 5, gameScene.height)
+    filter2.drawRect(0, 0, gameScene.width * 20, gameScene.height)
     filter2.endFill()
     sky.beginFill(0xbde1f8, 1)
-    sky.drawRect(0, 0, gameScene.width * 5, gameScene.height)
+    sky.drawRect(0, 0, gameScene.width * 20, gameScene.height)
     sky.endFill()
     gameBgFirst.addChild(sky)
     montagne = new Montagne(sprites.background)
@@ -294,9 +360,6 @@ export function game () {
       platObj[i].animate()
       platObj[i].check(player)
     }
-    // for (let i = 0; i < clouds.length; i++) {
-    //   clouds[i].animate()
-    // }
     if (sanity <= 0) {
       sentence = "Tu es devenue folle."
       gameOver(sentence)
@@ -349,7 +412,7 @@ export function game () {
     }
 
     display () {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 20; i++) {
         for (let y = 0; y < 3; y++) {
           this.sprite = new PIXI.Sprite(this.sheet.textures[`montagne_${3 - y}.png`])
           this.sprite.scale.set(0.7)
@@ -380,6 +443,22 @@ export function game () {
       this.right = keyboard("d")
       this.up = keyboard(" ")
       this.jumped = 0
+      this.footstepSound = sound.add("footstep", {
+        url: "assets/sound/footstep.mp3",
+        loop: true,
+        speed: 1.1,
+        volume: 0.3
+      })
+      this.jumpSound = sound.add("jump", {
+        url: "assets/sound/sfx_jump.mp3",
+        speed: 1.5,
+        volume: 0.1
+      })
+      this.landingSound = sound.add("jump", {
+        url: "assets/sound/jumpland44100.mp3",
+        speed: 1.5,
+        volume: 0.02
+      })
     }
 
     display () {
@@ -401,9 +480,8 @@ export function game () {
         this.sprite.animationSpeed = 0.27
         this.force = -10
         this.sprite.scale.x = -0.3
-
         this.sprite.play()
-        // this.stageVx = -this.speed
+        this.footstepSound.play()
       }
       this.right.press = (e) => {
         this.sprite.textures = this.sheet.player.animations.perso
@@ -411,6 +489,8 @@ export function game () {
         this.sprite.animationSpeed = 0.27
         this.sprite.play()
         this.force = 10
+
+        this.footstepSound.play()
       }
       this.up.press = (e) => {
         if (stamina >= 50) {
@@ -419,19 +499,24 @@ export function game () {
           MATTER.Body.applyForce(this.body, this.body.position, { x: 0, y: this.forceJump })
           this.jumped++
           timer = 0
+          this.footstepSound.stop()
+          this.jumpSound.play()
         }
       }
       this.left.release = (e) => {
         this.force = 0
         this.sprite.textures = this.sheet.player2.animations.perso_stop
         this.sprite.animationSpeed = 0.05
+
         this.sprite.play()
+        this.footstepSound.stop()
       }
       this.right.release = (e) => {
         this.force = 0
         this.sprite.textures = this.sheet.player2.animations.perso_stop
         this.sprite.animationSpeed = 0.05
         this.sprite.play()
+        this.footstepSound.stop()
       }
 
       this.up.release = (e) => {
@@ -443,8 +528,12 @@ export function game () {
       if (this.right.isDown && this.left.isDown) {
         this.sprite.textures = this.sheet.player.animations.perso
         this.force = 0
+        this.footstepSound.stop()
       }
 
+      // if (this.body.position.y > this.body.positionPrev.y) {
+      //   this.footstepSound.stop()
+      // }
       if (this.right.isDown || this.left.isDown) {
         MATTER.Body.translate(this.body, { x: this.force, y: 0 })
       }
@@ -475,7 +564,6 @@ export function game () {
       this.right = keyboard("ArrowRight")
       this.up = keyboard("ArrowUp")
       this.down = keyboard("ArrowDown")
-      this.test = keyboard("z")
       this.vx = 0
       this.vy = 0
     }
@@ -502,7 +590,7 @@ export function game () {
 
     control () {
       this.left.press = e => {
-        this.vx = -15
+        this.vx = -25
         this.sprite.angle = 90
       }
       this.left.release = e => {
@@ -510,7 +598,7 @@ export function game () {
         this.sprite.angle = 0
       }
       this.right.press = e => {
-        this.vx = 15
+        this.vx = 25
         this.sprite.angle = -90
       }
       this.right.release = e => {
@@ -536,6 +624,30 @@ export function game () {
     }
 
     animate () {
+      if (this.up.isDown) {
+        if (this.right.isDown) {
+          this.sprite.angle = -115
+        } else if (this.left.isDown) {
+          this.sprite.angle = 115
+        } else {
+          this.sprite.angle = 180
+        }
+      }
+      if (this.down.isDown) {
+        if (this.right.isDown) {
+          this.sprite.angle = -45
+        } else if (this.left.isDown) {
+          this.sprite.angle = 45
+        } else {
+          this.sprite.angle = 0
+        }
+      }
+      if (this.up.isDown && this.down.isDown) {
+        this.vy = 0
+      } else if (this.left.isDown && this.right.isDown) {
+        this.vx = 0
+        this.sprite.angle = 0
+      }
       this.focus.position.x += this.vx
       this.focus.position.y += this.vy
       this.sprite.x += this.vx
@@ -590,6 +702,10 @@ export function game () {
               this.sprite.visible = false
               gameFg.removeChild(this.sprite)
             })
+        }
+        if (this.sprite.x < gameFg.pivot.x) {
+          this.sprite.visible = false
+          gameFg.removeChild(this.sprite)
         }
         if (collideTest(this.sprite, this.player.sprite)) {
           sanity += -50
@@ -650,7 +766,6 @@ export function game () {
       if (this.platInfo.falling) {
         game.ticker.add(e => {
           if (this.willFall) {
-            MATTER.Body.translate(this.body, { x: 0, y: 0.2 })
             setTimeout(e => {
               this.spriteLeft.y += 10
               this.spriteLeft.rotation += 0.01
@@ -705,6 +820,10 @@ export function game () {
           }
           this.player.jumped = 0
           this.player.sprite.play()
+          this.player.landingSound.play()
+          if (player.right.isDown || player.left.isDown) {
+            player.footstepSound.play()
+          }
         }
 
         if (this.platInfo.moveX) {
@@ -731,6 +850,7 @@ export function game () {
       this.platInfo = platInfo
       this.x = this.platInfo.x
       this.y = this.platInfo.y
+      this.action = keyboard("e")
       this.option = {
         isStatic: true
       }
@@ -743,34 +863,32 @@ export function game () {
         this.sprite.height = this.sprite.width * (1250 / 2500)
         this.sprite.animationSpeed = 0.157
         this.sprite.play()
+      } else if (this.platInfo.model === "pause1") {
+        this.sprite = new PIXI.AnimatedSprite(this.sheet.plateformePause.animations.plateforme_pause1)
+        this.sprite.animationSpeed = 0.167
+        this.sprite.play()
+        this.sprite.width = _width
+        this.sprite.height = this.sprite.width * (720 / 2560)
+      } else if (this.platInfo.model === "pause2") {
+        this.sprite = new PIXI.Sprite(this.sheet.plateformePause.textures["plateforme_pause2.png"])
+        this.sprite.width = _width
+        this.sprite.height = this.sprite.width * (720 / 2560)
       }
-
-      // } else if (this.platInfo.model === "pause0") {
-      //   this.sheet = this.sheet.plateformeJump
-      //   this.sprite = new PIXI.Sprite(this.sheet.textures["plateform_pause.png"])
-      // } else if (this.platInfo.model === "pause1") {
-      //   this.sheet = this.sheet.plateformePause2
-      //   this.sprite = new PIXI.AnimatedSprite(this.sheet.animations.plateform_pause2_anim)
-      //   this.sprite.animationSpeed = 0.167
-      //   this.sprite.play()
-      // }
       this.sprite.anchor.set(0.5)
       this.sprite.x = this.x + this.sprite.width / 2
       this.sprite.y = this.y + this.sprite.height / 2
       this.body = Bodies.rectangle(this.sprite.x, this.sprite.y, this.sprite.width, this.sprite.height, this.option)
       if (this.platInfo.portail.isHere) {
-        this.action = keyboard("e")
         this.spritePortail = new PIXI.Sprite(this.sheet.portail.textures[`portail_${this.platInfo.portail.state}.png`])
         this.spritePortail.anchor.set(0.5, 1)
         this.spritePortail.scale.set(0.6)
         this.spritePortail.y = _height / 2
-        if (this.platInfo.portail.model === "start") {
-          this.spritePortail.x = this.spritePortail.width / 2
-          gameScene.addChild(this.spritePortail)
+        if (this.platInfo.portail.where === "start") {
+          this.spritePortail.x = this.platInfo.portail.pos + this.spritePortail.width / 2
         } else {
-          this.spritePortail.x = this.sprite.width - this.spritePortail.width / 2
-          gameScene.addChild(this.spritePortail)
+          this.spritePortail.x = this.platInfo.portail.pos - this.spritePortail.width / 2 + this.sprite.width
         }
+        gameScene.addChild(this.spritePortail)
       }
       this.body.friction = 0
       this.body.frictionStatic = 0
@@ -780,16 +898,20 @@ export function game () {
 
     check (player) {
       this.colisionPlayer = collideTest(this.sprite, player.sprite)
-      this.colisionPlayerPortail = collideTest(this.spritePortail, player.sprite)
-      this.action.press = e => {
-        if (this.colisionPlayerPortail && this.platInfo.portail.state === "open") {
-          gameEnd()
+      if (this.platInfo.portail.isHere) {
+        this.colisionPlayerPortail = collideTest(this.spritePortail, player.sprite)
+        this.action.press = e => {
+          if (this.colisionPlayerPortail && this.platInfo.portail.state === "open") {
+            currentLevel += 1
+            gameEnd()
+          }
         }
       }
+
       if (this.colisionPlayer) {
         timer += 1
-        const timerJump = timer % 61
-        if (timerJump >= 60) {
+        const timerJump = timer % 31
+        if (timerJump >= 30) {
           stamina = 100
         }
         if (player.jumped > 0) {
@@ -800,11 +922,12 @@ export function game () {
           }
           player.jumped = 0
           player.sprite.play()
+          player.landingSound.play()
+          if (player.right.isDown || player.left.isDown) {
+            player.footstepSound.play()
+          }
         }
       }
     }
   }
-  window.addEventListener("resize", e => {
-    game.renderer.resize(window.innerWidth, window.innerHeight)
-  })
 }

@@ -12,20 +12,33 @@
 <meta property="og:url" content="https://www.bryanjennequin.be/">
 <meta property="og:title" content="Blind Rush | TFE | jeu de plateforme sur navigateur">
 <meta property="og:description" content="Blind Rush est un jeu de plateforme un peu particulier ou le héro est aveugle, et dois donc se fier à la vision de la relique magique qui l'accompagne">
-<meta property="og:image" content="https://www.bryanjennequin.be/projets/tfe/beta/assets/images/meta.png">
+<meta property="og:image" content="https://www.bryanjennequin.be/projets/tfe/assets/images/meta.png">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://www.bryanjennequin.be/">
 <meta property="twitter:title" content="Blind Rush | TFE | jeu de plateforme sur navigateur">
 <meta property="twitter:description" content="Blind Rush est un jeu de plateforme un peu particulier ou le héro est aveugle, et dois donc se fier à la vision de la relique magique qui l'accompagne">
-<meta property="twitter:image" content="https://www.bryanjennequin.be/projets/tfe/beta/assets/images/meta.png">
+<meta property="twitter:image" content="https://www.bryanjennequin.be/projets/tfe/assets/images/meta.png">
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="assets/images/favicon/site.webmanifest">
+<link rel="shortcut icon" href="assets/images/favicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#603cba">
+<meta name="msapplication-config" content="/assets/images/favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"> 
 <link rel="stylesheet" type="text/css" href="styles/app.css">
 </head>
 <body>
   <section id="menu" class="menu">
+    <h1 class="title title--main">Blind Rush</h1>  
     <canvas id="canvasStart"></canvas>
     <nav>
       <ul class="nav">
@@ -35,8 +48,8 @@
         <li class="nav__el" ><button data-name="level">Niveaux</button></li>
       </ul>
     </nav>
+    <a class ="logo" href="https://www.bryanjennequin.be/projets/tfe/">Blind Rush</a>
     <div id="mainMenu" class="mainMenu">
-      <h1 class="title">Blind Rush</h1>  
       <p class="para">Appuye sur entrée pour commencer l'aventure</p>
     </div>
     <div id="control" class="control">
@@ -110,7 +123,6 @@
   </section>
   <section id="pause" class="menu menu--pause control control--game"> 
       <h2 class="title title--small">Le jeu est en pause</h2>
-      <p class="para para--pause">Appuye sur entrée pour reprendre</p>
       <div class="control-touch">
         <div class="control-touch__el">
           <h3 class=" title title--control">Ton personnage</h3>
@@ -175,9 +187,12 @@
     <p class="para">Appuye sur entrée pour recommencer</p>
   </section>
   <section id="gameEnd" class="menu menu--gameEnd">
-    <h2 class="title title--gameOver">Bravo tu as terminé ce niveau!</h2>
-    <p class="para"> Pour l'instant, tu as terminé tous les niveaux disponibles, appuye sur entrée pour revenir au menu principal</p>
-
+    <h2 class="title title--gameOver">Niveau terminé</h2>
+    <p id="paraEnd" class="para"> Pour l'instant, tu as terminé tous les niveaux disponibles, appuye sur entrée pour revenir au menu principal</p>
+  </section>
+  <section id="mobile" class="mobile">
+    <h2 class="title title--mobile">Désolé,</h2>
+    <p>Ce jeu n'est pas disponible sur mobile et tablette</p>
   </section>
   <canvas id="canvasGame"></canvas>
   <script src="scripts/app.js"></script>
