@@ -117,7 +117,8 @@ export function game () {
       "relique": PIXI.Loader.shared.resources["./assets/images/relique/relique.json"].spritesheet,
       "background": PIXI.Loader.shared.resources["./assets/images/montagne.json"].spritesheet,
       "ui": PIXI.Loader.shared.resources["./assets/images/UI/ui.json"].spritesheet,
-      "portail": PIXI.Loader.shared.resources["./assets/images/portail/portail.json"].spritesheet
+      "portail": PIXI.Loader.shared.resources["./assets/images/portail/portail.json"].spritesheet,
+      "portailText": PIXI.Loader.shared.resources["./assets/images/portailCommand.png"]
     }
     currentLevel = level
     ui(sprites)
@@ -687,7 +688,7 @@ export function game () {
     }
 
     animate () {
-      this.birdAnim = GSAP.gsap.to(this.sprite, { x: this.player.sprite.x, y: this.player.sprite.y, duration: 3, ease: "none" })
+      this.birdAnim = GSAP.gsap.to(this.sprite, { x: this.player.sprite.x, y: this.player.sprite.y, duration: 2, ease: "none" })
       allAnim.push(this.birdAnim)
     }
 
@@ -850,6 +851,7 @@ export function game () {
       this.platInfo = platInfo
       this.x = this.platInfo.x
       this.y = this.platInfo.y
+      this.text = new PIXI.Sprite.from("./assets/images/portailCommand.png")
       this.action = keyboard("e")
       this.option = {
         isStatic: true
@@ -857,6 +859,11 @@ export function game () {
     }
 
     display () {
+      gameFg.addChild(this.text)
+      this.text.anchor.set(0.5)
+      this.text.scale.set(0.3)
+      this.text.visible = false
+      this.text.texture.mipmap = PIXI.MIPMAP_MODES.ON
       if (this.platInfo.model === "start") {
         this.sprite = new PIXI.AnimatedSprite(this.sheet.plateformeStart.animations.plateforme_start)
         this.sprite.width = _width - 200
@@ -907,7 +914,13 @@ export function game () {
           }
         }
       }
-
+      if (this.colisionPlayerPortail && this.platInfo.portail.state === "open") {
+        this.text.x = this.spritePortail.x
+        this.text.y = this.spritePortail.y + this.spritePortail.height / 4
+        this.text.visible = true
+      } else {
+        this.text.visible = false
+      }
       if (this.colisionPlayer) {
         timer += 1
         const timerJump = timer % 31

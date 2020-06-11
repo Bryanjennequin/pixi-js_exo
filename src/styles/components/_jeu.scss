@@ -56,6 +56,7 @@ button{
   width: 90%;
   margin: 0 auto;
 }
+
 #story, #control, #level, #pause, #gameOver, #gameEnd{
   display: none;
 }
@@ -128,29 +129,7 @@ button{
   margin: auto;
   height: 100%;
 }
-.button{
-  position: relative;
-  color: $c__white--dark;
-  font-size: $size__small;
-  border: 5px solid $c__white--dark;
-  border-bottom: none;
-  border-top: none;
-  border-radius: 50px;
-  animation: buttonAnim .6s cubic-bezier(0.45, 0, 0.55, 1) alternate infinite;
-  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  &:hover{
-      
-    cursor: pointer;
-  }
-}
-@keyframes buttonAnim{
-  0%{
-    padding: 20px 90px;
-  }
-  100%{
-    padding: 20px 100px;
-  }
-}
+
 .gameui{
   width: 45px;
   height: 22.5px;

@@ -15,6 +15,7 @@ PIXI.Loader.shared
   .add("./assets/images/UI/ui.json")
   .add("./assets/images/portail/portail.json")
   .add("./assets/images/Menu/menu.json")
+  // .add("./assets/images/portailCommand.png")
   .add("./assets/sound/wind.mp3")
   .load(e => {})
   .onComplete.add(e => {

@@ -136,7 +136,4 @@ export function menu () {
   let monstre = new Monstre()
   monstre.display()
   monstre.animate()
-  window.addEventListener("resize", e => {
-    canvasStart.renderer.resize(window.innerWidth, window.innerHeight)
-  })
 }
